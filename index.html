@@ -48,15 +48,14 @@ document.addEventListener("mousemove", updateHover);
 document.addEventListener("mousedown", updateClick);
 document.addEventListener("mouseup", updateClick);
 
-function preventBehavior(e) {
+function touchMove(e) {
     e.preventDefault(); 
+	updateHover(e);
 };
 
-document.addEventListener("touchmove", preventBehavior, {passive: false});
-//document.addEventListener("keydown", keyEvent);
-//document.addEventListener("touchstart", updateHover);
-//document.addEventListener("touchmove", updateHover);
-//document.addEventListener("touchend", updateClick);
+document.addEventListener("touchmove", touchMove, {passive: false});
+document.addEventListener("touchstart", updateClick);
+document.addEventListener("touchend", updateClick);
 
 
 function magnet(arr){
@@ -131,12 +130,35 @@ player.init(playerDef);
 console.log(player.pos.x);
 function updateHover(event)
 {
-	
+	drawIt(pos(event));
 }
 
 function updateClick(event)
 {
-	
+	drawIt(pos(event));
+}
+
+function pos(event)
+{
+	if(event.type.substr(0,5) === 'mouse')
+	{
+		return [event.clientX, event.clientY];
+	}
+	else
+	{
+		return [event.pageX, event.pageY];
+	}	
+}
+
+function drawIt(xy)
+{
+	if(xy[0] > offX && xy[0] < (screenW - offX) && xy[1] > offY && xy[1] < (screenH - offY))
+	{
+		frontCx.fillStyle = 'RGB(200,0,0)';
+		frontCx.beginPath();
+		frontCx.arc(xy[0], xy[1], 5, 0, 2 * Math.PI);
+		frontCx.fill();
+	}
 }
 
 backCx.fillStyle = 'RGB(0,0,0)';
