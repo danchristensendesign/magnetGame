@@ -20,26 +20,28 @@
 const screenR = .635;
 const screenW = (window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth);
 const screenH = (window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight);
-const actW = Math.min(screenW, Math.floor(screenH * screenR));
-const actH = Math.floor(actW/screenR);
+const actH = Math.min(screenH, screenW / screenR);
+const actW = (actH *screenR);
 var mainDiv = document.getElementById("canvDiv");
 mainDiv.style.left = 0 + 'px';
 mainDiv.style.top = 0 + 'px';
+const offX = (screenW - actW)/2;
+const offY = (screenH - actH)/2;
 
 var backCanv = document.getElementById("backCanv");
-backCanv.width = actW;
-backCanv.height = actH;
+backCanv.width = screenW;
+backCanv.height = screenH;
 var backCx = backCanv.getContext("2d");
 
 var midCanv = document.getElementById("midCanv");
-midCanv.width = actW;
-midCanv.height = actH;
+midCanv.width = screenW;
+midCanv.height = screenH;
 var midCx = midCanv.getContext("2d");
 
 
 var frontCanv = document.getElementById("frontCanv");
-frontCanv.width = actW;
-frontCanv.height = actH;
+frontCanv.width = screenW;
+frontCanv.height = screenH;
 var frontCx = frontCanv.getContext("2d");
 
 document.addEventListener("mousemove", updateHover);
@@ -138,7 +140,7 @@ function updateClick(event)
 }
 
 backCx.fillStyle = 'RGB(0,0,0)';
-backCx.fillRect(0,0,actW, actH);
+backCx.fillRect(offX,offY,actW, actH);
 
 
 </script>
