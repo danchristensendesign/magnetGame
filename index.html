@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+
+
+
+<body>
+
+
+<div id="canvDiv" class="unselectable" style="position:absolute;">
+	<canvas id="backCanv" style="position: absolute; left: 0; top: 0; z-index: 0;"></canvas>
+	<canvas id="midCanv" style="position: absolute; left: 0; top: 0; z-index: 1;"></canvas>
+	<canvas id="frontCanv" oncontextmenu="return false;" style="position: absolute; left: 0; top: 0; z-index: 2;"></canvas>	
+</div>
+
+
+
+<script>
+
+const screenW = (window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth);
+const screenH = (window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight);
+
+var mainDiv = document.getElementById("canvDiv");
+mainDiv.style.left = 0 + 'px';
+mainDiv.style.top = 0 + 'px';
+
+var backCanv = document.getElementById("backCanv");
+backCanv.width = screenW;
+backCanv.height = screenH;
+var backCx = backCanv.getContext("2d");
+
+var midCanv = document.getElementById("midCanv");
+midCanv.width = screenW;
+midCanv.height = screenH;
+var midCx = midCanv.getContext("2d");
+
+
+var frontCanv = document.getElementById("frontCanv");
+frontCanv.width = screenW;
+frontCanv.height = screenH;
+var frontCx = frontCanv.getContext("2d");
+
+document.addEventListener("mousemove", updateHover);
+document.addEventListener("mousedown", updateClick);
+document.addEventListener("mouseup", updateClick);
+//document.addEventListener("keydown", keyEvent);
+//document.addEventListener("touchstart", updateHover);
+//document.addEventListener("touchmove", updateHover);
+//document.addEventListener("touchend", updateClick);
+
+
+function magnet(arr){
+	this.x = arr[0];
+	this.y = arr[1];
+	this.r = arr[2];
+	this.on = false;
+}
+
+var magnets = {
+	arr: [],
+	init: function(newArr) 
+	{
+		this.arr = [];
+		var len = newArr.length;
+		for (var i = 0; i < len; i++) 
+		{
+			this.arr.push(new magnet(newArr[i]));
+		}
+	}
+}
+
+var magDefs = [
+	[5,4,2],
+	[1,2,3],
+	[3,2,1]
+];
+var playerDef = [3,3,1];
+var wormDef = [5,5,2];
+
+magnets.init(magDefs);
+console.log(magnets.arr.length);
+console.log(magnets.arr[1]);
+
+
+var player = {
+	r: 3,
+	pos: {x: "1", y:2},
+	vel: {x: 0, y: 0},
+	init: function (arr)
+	{
+		this.pos.x = arr[0]; 
+		this.pos.y = arr[1];
+		this.r = arr[2];
+		this.vel.x = 0;
+		this.vel.y = 0;
+	},
+	update: function()
+	{
+		
+	}
+		
+};
+
+var worm = {
+	x: 2, 
+	y: 3,
+	r: 1, 
+	init: function(arr)
+	{
+		this.x = arr[0];
+		this.y = arr[1];
+		this.r = arr[2];
+	}
+};
+
+console.log(player.pos.x);
+console.log(player.r);
+player.pos.x = 3;
+console.log(player.pos.x);
+player.init(playerDef);
+console.log(player.pos.x);
+function updateHover(event)
+{
+	
+}
+
+function updateClick(event)
+{
+	
+}
+
+backCx.strokeStyle = 'RGB(0,0,0)';
+backCx.strokeText('w: ' + screenW + ' h: ' + screenH, 10,10);
+
+</script>
+
+</body>
+
+</html> 
