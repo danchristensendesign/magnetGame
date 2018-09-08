@@ -16,27 +16,29 @@
 
 <script>
 
+const screenR = .635;
 const screenW = (window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth);
 const screenH = (window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight);
-
+const actW = Math.min(screenW, Math.floor(screenH * screenR));
+const actH = Math.floor(actW/screenR);
 var mainDiv = document.getElementById("canvDiv");
 mainDiv.style.left = 0 + 'px';
 mainDiv.style.top = 0 + 'px';
 
 var backCanv = document.getElementById("backCanv");
-backCanv.width = screenW;
-backCanv.height = screenH;
+backCanv.width = actW;
+backCanv.height = actH;
 var backCx = backCanv.getContext("2d");
 
 var midCanv = document.getElementById("midCanv");
-midCanv.width = screenW;
-midCanv.height = screenH;
+midCanv.width = actW;
+midCanv.height = actH;
 var midCx = midCanv.getContext("2d");
 
 
 var frontCanv = document.getElementById("frontCanv");
-frontCanv.width = screenW;
-frontCanv.height = screenH;
+frontCanv.width = actW;
+frontCanv.height = actH;
 var frontCx = frontCanv.getContext("2d");
 
 document.addEventListener("mousemove", updateHover);
@@ -128,8 +130,10 @@ function updateClick(event)
 	
 }
 
-backCx.strokeStyle = 'RGB(0,0,0)';
-backCx.strokeText('w: ' + screenW + ' h: ' + screenH, 10,10);
+backCx.fillStyle = 'RGB(0,0,0)';
+backCx.strokeText('w: ' + actW + ' h: ' + actH, 10,10);
+backCx.fillRect(2,2,actW-4, actH-4);
+
 
 </script>
 
