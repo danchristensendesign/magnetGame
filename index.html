@@ -17,6 +17,9 @@
 
 <script>
 
+const playing = 0;
+const winning = 1;
+const dying = 2;
 const R = -10000;
 const screenR = .635;
 const screenW = (window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth);
@@ -104,7 +107,7 @@ var player = {
 	
 	sr:0,
 	spos: {x: 0, y: 0},
-	
+	state: playing,
 	init: function(arr)
 	{
 		this.pos.x = arr[0]; 
@@ -113,6 +116,7 @@ var player = {
 		this.sr = gameToScreen(arr[2], true);
 		this.vel.x = 0;
 		this.vel.y = 0;
+		this.state = playing;
 		this.update();
 	},
 	
@@ -144,23 +148,65 @@ var worm = {
 	}
 };
 
-var magDefs = [
-	[30,15,15],
-	[70,15, 15]
 
+
+var levels = [
+	[
+		[[50,15,15]],
+		
+		[50,30,6],
+		[50,85,3]
+	],
+	
+	[
+		[[30,15,15],
+		[70,15, 15]],
+		
+		[50,30,6],
+		[50,85,3]
+	],
+	
+	[
+		[[20,80,10],
+		[70,15, 15]],
+		
+		[50,30,6],
+		[50,85,3]
+	],
+	
+	[
+		[[30,50,10],
+		[80,15, 15]],
+		
+		[10,70,6],
+		[50,85,3]
+	],
+		
 ];
-var playerDef = [50,85,3];
-var wormDef = [50,30,6];
+var lastTime;
+var levelInd = 3;
+loadLevel();
+function loadLevel()
+{
+	if(levelInd < levels.length)
+	{
+		var level = levels[levelInd];
+		magnets.init(level[0]);
+		worm.init(level[1]);
+		player.init(level[2]);
+		lastTime = new Date().getTime();
+		drawT();
+	}
+	
+}
 
-player.init(playerDef);
-magnets.init(magDefs);
-worm.init(wormDef);
+
 //player.vel.y = -100;
-var lastTime = new Date().getTime();
-drawT();
+
 
 function drawT()
 {
+	midCx.clearRect(0, 0, screenW, screenH);
 	midCx.fillStyle = 'RGB(233, 233, 233)';
 	for(var i = 0; i < magnets.arr.length; i+= 1)
 	{
@@ -197,22 +243,28 @@ function updateClick(event)
 
 function pos(event)
 {
-	for(var i = 0; i < magnets.arr.length; i+=1 )
+	if((event.type === 'mousedown' || event.type === 'touchstart') && player.state === dying) 
 	{
-		magnets.arr[i].isOn = false;
-	}
-	if(event.type.substr(0,5) === 'mouse')
-	{
-		//console.log('a');
-		checkIt([event.clientX - offX, event.clientY - offY]);
+		loadLevel();
 	}
 	else
 	{
-		for (i=0; i < event.touches.length; i++) 
-		{  
-			checkIt([event.touches[i].pageX - offX, event.touches[i].pageY - offY]);
+		for(var i = 0; i < magnets.arr.length; i+=1 )
+		{
+			magnets.arr[i].isOn = false;
 		}
-	}	
+		if(event.type.substr(0,5) === 'mouse')
+		{
+			checkIt([event.clientX - offX, event.clientY - offY]);
+		}
+		else
+		{
+			for (i=0; i < event.touches.length; i++) 
+			{  
+				checkIt([event.touches[i].pageX - offX, event.touches[i].pageY - offY]);
+			}
+		}	
+	}
 }
 
 function checkIt(arr)
@@ -258,37 +310,62 @@ function updateFrame()
 	lastTime = newTime;
 	
 	//sum forces on player
-	var fx = 0;
-	var fy = 0;
-	
-	for(var i = 0; i < magnets.arr.length; i+=1 )
+	if(player.state === playing)
 	{
-		if(magnets.arr[i].isOn)
+		var fx = 0;
+		var fy = 0;
+		
+		for(var i = 0; i < magnets.arr.length; i+=1 )
 		{
-			var mag = magnets.arr[i];
-			var dx = player.spos.x - mag.sx;
-			var dy = player.spos.y - mag.sy;
-			var d = Math.pow(Math.pow(dx, 2) + Math.pow(dy, 2), 1/2);
-			var fMag = R * mag.sr / Math.pow(d, 1.4);
-			var theta = Math.atan2(dy, dx);
-			fx += Math.cos(theta) * fMag;
-			fy += Math.sin(theta) * fMag;
+			if(magnets.arr[i].isOn)
+			{
+				var mag = magnets.arr[i];
+				var dx = player.spos.x - mag.sx;
+				var dy = player.spos.y - mag.sy;
+				var d = Math.pow(Math.pow(dx, 2) + Math.pow(dy, 2), 1/2);
+				var fMag = R * mag.sr / Math.pow(d, 1.4);
+				var theta = Math.atan2(dy, dx);
+				fx += Math.cos(theta) * fMag;
+				fy += Math.sin(theta) * fMag;
+			}
 		}
+		player.vel.x += fx * dt;
+		player.vel.y += fy * dt;
+		player.spos.x += player.vel.x * dt;
+		player.spos.y += player.vel.y * dt;
+		if(player.spos.x > actW) player.vel.x = -Math.abs(player.vel.x)
+		else if(player.spos.x < 0) player.vel.x = Math.abs(player.vel.x)
+		if(player.spos.y > actH) player.vel.y = -Math.abs(player.vel.y)
+		else if(player.spos.y < 0) player.vel.y = Math.abs(player.vel.y)
+		drawPlayer();
+		checkStatus();
 	}
-	player.vel.x += fx * dt;
-	player.vel.y += fy * dt;
-	player.spos.x += player.vel.x * dt;
-	player.spos.y += player.vel.y * dt;
-	if(player.spos.x > actW) player.vel.x = -Math.abs(player.vel.x)
-	else if(player.spos.x < 0) player.vel.x = Math.abs(player.vel.x)
-	if(player.spos.y > actH) player.vel.y = -Math.abs(player.vel.y)
-	else if(player.spos.y < 0) player.vel.y = Math.abs(player.vel.y)
-	drawPlayer();
-			
-
+	
+	
+	
 	requestAnimationFrame(updateFrame);
 }
 
+function checkStatus()
+{
+	if(distance(player.spos.x, player.spos.y, worm.sx, worm.sy) <= (worm.sr - player.sr))
+	{
+		player.state = winning;
+		levelInd++;
+		loadLevel();
+	}
+	else
+	{
+		for(var i = 0; i < magnets.arr.length; i+=1 )
+		{
+			if(distance(player.spos.x, player.spos.y, magnets.arr[i].sx, magnets.arr[i].sy) <= (magnets.arr[i].sr + player.sr))
+			{
+				player.state = dying;
+			}
+		}
+	}
+		
+}
 function distance(x1, y1, x2, y2)
 {
 	return Math.pow(Math.pow(x2-x1, 2) + Math.pow(y2-y1, 2), 1/2);
