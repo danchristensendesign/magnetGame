@@ -197,6 +197,10 @@ function updateClick(event)
 
 function pos(event)
 {
+	for(var i = 0; i < magnets.arr.length; i+=1 )
+	{
+		magnets.arr[i].isOn = false;
+	}
 	if(event.type.substr(0,5) === 'mouse')
 	{
 		//console.log('a');
@@ -221,11 +225,11 @@ function checkIt(arr)
 			mag.isOn = true;
 			console.log('on');
 		}
-		else
+		/* else
 		{
 			mag.isOn = false;
 			console.log('off');
-		}
+		} */
 	}
 }
 /* function drawIt(xy)
