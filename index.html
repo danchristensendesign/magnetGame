@@ -183,17 +183,17 @@ var levels = [
 	],
 	
 	[
-		[[20,20,10],
-		[80,20, 10],
+		[[10,20,10],
+		[90,20, 10],
 		[50, 50, 10]],
 		
-		[50,35,6],
-		[50,85,3]
+		[50,90,6],
+		[50,75,3]
 	],
 		
 ];
 var lastTime;
-var levelInd = 2;
+var levelInd = 0;
 loadLevel();
 function loadLevel()
 {
@@ -342,10 +342,10 @@ function updateFrame()
 		player.vel.y += fy * dt;
 		player.spos.x += player.vel.x * dt;
 		player.spos.y += player.vel.y * dt;
-		if(player.spos.x > actW) player.vel.x = -Math.abs(player.vel.x)
+		/* if(player.spos.x > actW) player.vel.x = -Math.abs(player.vel.x)
 		else if(player.spos.x < 0) player.vel.x = Math.abs(player.vel.x)
 		if(player.spos.y > actH) player.vel.y = -Math.abs(player.vel.y)
-		else if(player.spos.y < 0) player.vel.y = Math.abs(player.vel.y)
+		else if(player.spos.y < 0) player.vel.y = Math.abs(player.vel.y) */
 		drawPlayer();
 		checkStatus();
 	}
@@ -365,13 +365,18 @@ function checkStatus()
 	}
 	else
 	{
-		for(var i = 0; i < magnets.arr.length; i+=1 )
+		if(player.spos.x > actW - player.sr || player.spos.x < 0 + player.sr || player.spos.y > actH - player.sr || player.spos.y < + player.sr) player.state = dying;
+		else
 		{
-			if(distance(player.spos.x, player.spos.y, magnets.arr[i].sx, magnets.arr[i].sy) <= (magnets.arr[i].sr + player.sr))
+			for(var i = 0; i < magnets.arr.length; i+=1 )
 			{
-				player.state = dying;
+				if(distance(player.spos.x, player.spos.y, magnets.arr[i].sx, magnets.arr[i].sy) <= (magnets.arr[i].sr + player.sr))
+				{
+					player.state = dying;
+				}
 			}
 		}
+		
 	}
 		
 }
