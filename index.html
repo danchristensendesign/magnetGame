@@ -380,14 +380,11 @@ function updateClick(event)
 
 function pos(event)
 {
-	if(event.type === 'mousedown' || event.type === 'touchstart') 
+	if((event.type === 'mousedown' || event.type === 'touchstart') && player.state !== playing)
 	{
-		if(player.state === dying) loadLevel();
-		else if(player.state == winning)
-		{
-			levelInd = 0;
-			loadLevel();
-		}
+		if(player.state == winning) levelInd = 0;
+		loadLevel();
+		
 	}
 	else
 	{
