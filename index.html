@@ -20,7 +20,7 @@
 const playerCol = 'RGB(230,230,230)';
 const magOffCol = 'RGB(111,183,214)';
 const magOnCol = 'RGB(133,292,93)';
-const magRingCol = 'RGB(251,182,209)';
+const magRingCol = 'RGB(100, 170, 200)';//'RGB(251,182,209)';
 const wormCol =  'RGB(30,30,255)';// 'RGB(0,0, 200)';
 const wormRingCol = 'RGB(192,5,248)';
 const AID = 3;
@@ -300,7 +300,7 @@ function strokeCircle(cx, col, wid, fadeIn, x, y, r, fullR)
 	cx.beginPath();
 	cx.lineWidth = wid;
 	cx.strokeStyle = col;
-	cx.globalAlpha = (fadeIn)? 1-r/fullR: r/fullR;
+	cx.globalAlpha = (fadeIn)? 1-r/fullR: Math.max(r - fullR * .3, 0)/fullR;
 	cx.arc(x + offX , y + offY, r, 0, 2 * Math.PI);
 	cx.stroke();
 }
@@ -340,7 +340,7 @@ function drawFrame(dt)
 		else
 		{
 			mag.tR -= dt * 30;
-			if(mag.tR < 3) mag.tR = mag.sr;
+			if(mag.tR < 3) mag.tR = mag.sr- actW/100;
 			strokeCircle(frontCx, magRingCol, actW/100, false, mag.sx, mag.sy, mag.tR, mag.sr);
 		}
 	}
