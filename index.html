@@ -170,7 +170,7 @@ var levels = [
 		[50,85,3]
 	],
 	
-	[
+ 	[
 		[[30,15,15],
 		[70,15, 15]],
 		
@@ -238,7 +238,7 @@ var levels = [
 		
 		[50,10,6],
 		[50,90,3]
-	],
+	], 
 		
 ];
 var lastTime;
@@ -380,9 +380,14 @@ function updateClick(event)
 
 function pos(event)
 {
-	if((event.type === 'mousedown' || event.type === 'touchstart') && (player.state === dying || player.state === winning)) 
+	if(event.type === 'mousedown' || event.type === 'touchstart') 
 	{
-		loadLevel();
+		if(player.state === dying) loadLevel();
+		else if(player.state == winning)
+		{
+			levelInd = 0;
+			loadLevel();
+		}
 	}
 	else
 	{
