@@ -58,10 +58,21 @@ document.addEventListener("touchstart", updateClick);
 document.addEventListener("touchend", updateClick);
 
 
+function gameToScreen(game, isX)
+{
+	if(isX) return (game /100 * actW);
+	else return (game/100 * actH);
+}
+
 function magnet(arr){
 	this.x = arr[0];
 	this.y = arr[1];
 	this.r = arr[2];
+	
+	this.sx = gameToScreen(arr[0], true);
+	this.sy = gameToScreen(arr[1], false);
+	this.sr = gameToScreen(arr[2], true);
+	
 	this.on = false;
 }
 
@@ -78,56 +89,90 @@ var magnets = {
 	}
 }
 
-var magDefs = [
-	[5,4,2],
-	[1,2,3],
-	[3,2,1]
-];
-var playerDef = [3,3,1];
-var wormDef = [5,5,2];
 
-magnets.init(magDefs);
-console.log(magnets.arr.length);
-console.log(magnets.arr[1]);
+
+
+
+
 
 
 var player = {
-	r: 3,
-	pos: {x: "1", y:2},
+	r: 0,
+	pos: {x: 0, y: 0},
 	vel: {x: 0, y: 0},
-	init: function (arr)
+	
+	sr:0,
+	spos: {x: 0, y: 0},
+	
+	init: function(arr)
 	{
 		this.pos.x = arr[0]; 
 		this.pos.y = arr[1];
 		this.r = arr[2];
+		this.sr = gameToScreen(arr[2], true);
 		this.vel.x = 0;
 		this.vel.y = 0;
+		this.update();
 	},
+	
 	update: function()
 	{
-		
+		this.spos.x = gameToScreen(this.pos.x, true);
+		this.spos.y = gameToScreen(this.pos.y, false);
 	}
 		
 };
 
 var worm = {
-	x: 2, 
-	y: 3,
-	r: 1, 
+	x: 0, 
+	y: 0,
+	r: 0, 
+	
+	sx: 0, 
+	sy: 0,
+	sr: 0,
 	init: function(arr)
 	{
 		this.x = arr[0];
 		this.y = arr[1];
 		this.r = arr[2];
+		
+		this.sx = gameToScreen(arr[0], true);
+		this.sy = gameToScreen(arr[1], false);
+		this.sr = gameToScreen(arr[2], true);
 	}
 };
 
-console.log(player.pos.x);
-console.log(player.r);
-player.pos.x = 3;
-console.log(player.pos.x);
+var magDefs = [
+	[50,15,15],
+
+];
+var playerDef = [50,85,3];
+var wormDef = [50,30,6];
+
 player.init(playerDef);
-console.log(player.pos.x);
+magnets.init(magDefs);
+worm.init(wormDef);
+drawT();
+
+function drawT()
+{
+	midCx.fillStyle = 'RGB(233, 233, 233)';
+	for(var i = 0; i < magnets.arr.length; i+= 1)
+	{
+		drawCircle(midCx, magnets.arr[i].sx, magnets.arr[i].sy, magnets.arr[i].sr);
+	}
+	drawCircle(midCx, player.spos.x, player.spos.y, player.sr);
+	drawCircle(midCx, worm.sx, worm.sy, worm.sr);
+}
+
+function drawCircle(cx, x, y, r)
+{
+	cx.beginPath();
+	cx.arc(x + offX , y + offY, r, 0, 2 * Math.PI);
+	cx.fill();
+}
+	
 function updateHover(event)
 {
 	//console.log('h');
