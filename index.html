@@ -148,7 +148,7 @@ function pos(event)
 	{
 		for (i=0; i < event.touches.length; i++) 
 		{  
-			return [event.touches[i].pageX, event.touches[i].pageY];
+			return [event.changedTouches[i].pageX, event.changedTouches[i].pageY];
 		}
 	}	
 }
