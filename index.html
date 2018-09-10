@@ -201,10 +201,20 @@ var levels = [
 		[90,60,6],
 		[50,75,3]
 	],
+	
+	[
+		[[60,20, 10],
+		[40, 40, 10],
+		[60,60, 10],
+		[40,80, 10]],
+		
+		[50,10,6],
+		[50,90,3]
+	],
 		
 ];
 var lastTime;
-var levelInd = 0;
+var levelInd = 5;
 loadLevel();
 function loadLevel()
 {
@@ -301,7 +311,7 @@ function drawFrame(dt)
 		}
 		else
 		{
-			mag.tR -= dt * 20;
+			mag.tR -= dt * 30;
 			if(mag.tR < 3) mag.tR = mag.sr;
 			strokeCircle(frontCx, magRingCol, actW/100, false, mag.sx, mag.sy, mag.tR, mag.sr);
 		}
