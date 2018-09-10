@@ -347,8 +347,16 @@ function drawFrame(dt)
 	
 	if(player.state !== playing)
 	{
-		frontCx.fillStyle = 'RGB(255,255,255)';
-		frontCx.globalAlpha = .3;
+		if(player.state === dying)
+		{
+			frontCx.fillStyle = 'RGB(255,255,255)';
+			frontCx.globalAlpha = .3;
+		}
+		else
+		{
+			frontCx.fillStyle = wormRingCol;
+			frontCx.globalAlpha = .6;
+		}
 		frontCx.fillRect(offX, offY, actW, actH);
 	}
 	
