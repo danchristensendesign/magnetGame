@@ -130,25 +130,27 @@ player.init(playerDef);
 console.log(player.pos.x);
 function updateHover(event)
 {
-	drawIt(pos(event));
+	//console.log('h');
+	pos(event);
 }
 
 function updateClick(event)
 {
-	drawIt(pos(event));
+	pos(event);
 }
 
 function pos(event)
 {
 	if(event.type.substr(0,5) === 'mouse')
 	{
-		return [event.clientX, event.clientY];
+		//console.log('a');
+		drawIt([event.clientX, event.clientY]);
 	}
 	else
 	{
-		for (i=0; i < event.changedTouches.length; i++) 
+		for (i=0; i < event.touches.length; i++) 
 		{  
-			return [event.changedTouches[i].pageX, event.changedTouches[i].pageY];
+			drawIt([event.touches[i].pageX, event.touches[i].pageY]);
 		}
 	}	
 }
@@ -162,6 +164,7 @@ function drawIt(xy)
 		frontCx.arc(xy[0], xy[1], 5, 0, 2 * Math.PI);
 		frontCx.fill();
 	}
+	console.log("d");
 }
 
 backCx.fillStyle = 'RGB(0,0,0)';
