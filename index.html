@@ -17,6 +17,13 @@
 
 <script>
 
+const playerCol = 'RGB(230,230,230)';
+const magOffCol = 'RGB(111,183,214)';
+const magOnCol = 'RGB(133,292,93)';
+const magRingCol = 'RGB(251,182,209)';
+const wormCol =  'RGB(30,30,255)';// 'RGB(0,0, 200)';
+const wormRingCol = 'RGB(192,5,248)';
+const AID = 3;
 const playing = 0;
 const winning = 1;
 const dying = 2;
@@ -78,6 +85,7 @@ function magnet(arr){
 	this.sr = gameToScreen(arr[2], true);
 	
 	this.isOn = false;
+	this.tR = this.sr;
 }
 
 var magnets = {
@@ -136,6 +144,8 @@ var worm = {
 	sx: 0, 
 	sy: 0,
 	sr: 0,
+	tr: 0,
+	trInc : 5,
 	init: function(arr)
 	{
 		this.x = arr[0];
@@ -145,6 +155,8 @@ var worm = {
 		this.sx = gameToScreen(arr[0], true);
 		this.sy = gameToScreen(arr[1], false);
 		this.sr = gameToScreen(arr[2], true);
+		this.tr = this.sr;
+		this.trInc = this.sr/6;
 	}
 };
 
@@ -183,11 +195,10 @@ var levels = [
 	],
 	
 	[
-		[[10,20,10],
-		[90,20, 10],
-		[50, 50, 10]],
+		[[90,20, 10],
+		[40, 50, 10]],
 		
-		[50,90,6],
+		[90,60,6],
 		[50,75,3]
 	],
 		
@@ -197,15 +208,15 @@ var levelInd = 0;
 loadLevel();
 function loadLevel()
 {
-	if(levelInd < levels.length)
-	{
-		var level = levels[levelInd];
-		magnets.init(level[0]);
-		worm.init(level[1]);
-		player.init(level[2]);
-		lastTime = new Date().getTime();
-		drawT();
-	}
+	if(levelInd >= levels.length) levelInd = levels.length - 1;
+
+	var level = levels[levelInd];
+	magnets.init(level[0]);
+	worm.init(level[1]);
+	player.init(level[2]);
+	lastTime = new Date().getTime();
+	drawT();
+
 	
 }
 
@@ -219,23 +230,94 @@ function drawT()
 	midCx.fillStyle = 'RGB(233, 233, 233)';
 	for(var i = 0; i < magnets.arr.length; i+= 1)
 	{
-		drawCircle(midCx, magnets.arr[i].sx, magnets.arr[i].sy, magnets.arr[i].sr);
+		drawCircle(midCx, magOffCol, magnets.arr[i].sx, magnets.arr[i].sy, magnets.arr[i].sr);
+		/* var tR = magnets.arr[i].sr;
+		
+		midCx.strokeStyle = 'RGB(0,0,0)';
+		while(tR > 3)
+		{
+			midCx.beginPath();
+			midCx.arc(magnets.arr[i].sx + offX, magnets.arr[i].sy + offY, tR, 0, 2 * Math.PI);
+			midCx.stroke();
+			tR -= 1/100 * actW;
+		} */
+		
+		
+			
 	}
-	drawCircle(midCx, worm.sx, worm.sy, worm.sr);
+	drawCircle(midCx, wormCol, worm.sx, worm.sy, worm.sr);
 }
 
-function drawCircle(cx, x, y, r)
+function drawCircle(cx, col, x, y, r)
 {
 	cx.beginPath();
+	cx.globalAlpha = 1;
+	cx.fillStyle = col;
 	cx.arc(x + offX , y + offY, r, 0, 2 * Math.PI);
 	cx.fill();
 }
 
-function drawPlayer()
+function strokeCircle(cx, col, wid, fadeIn, x, y, r, fullR)
 {
+	cx.beginPath();
+	cx.lineWidth = wid;
+	cx.strokeStyle = col;
+	cx.globalAlpha = (fadeIn)? 1-r/fullR: r/fullR;
+	cx.arc(x + offX , y + offY, r, 0, 2 * Math.PI);
+	cx.stroke();
+}
+
+var dead = false;
+function drawFrame(dt)
+{
+	
 	frontCx.fillStyle = 'RGB(255,255,255)';
 	frontCx.clearRect(0, 0, screenW, screenH);
-	drawCircle(frontCx, player.spos.x, player.spos.y, player.sr);
+	
+
+	worm.tr -= dt * 10;
+	if(worm.tr < 0) worm.tr = worm.sr;
+	var tr = worm.tr;
+	while(tr > 0)
+	{
+		strokeCircle(frontCx, wormRingCol, actW * .007, true, worm.sx, worm.sy, tr, worm.sr);
+		tr -= worm.trInc;
+	}
+	tr = worm.tr + worm.trInc;
+	while(tr < worm.sr)
+	{
+		strokeCircle(frontCx, wormRingCol, actW * .007, true, worm.sx, worm.sy, tr, worm.sr);
+		tr += worm.trInc;
+	}
+	
+	drawCircle(frontCx, playerCol, player.spos.x, player.spos.y, player.sr);
+	
+	for(var i = 0; i < magnets.arr.length; i+=1 )
+	{
+		var mag = magnets.arr[i];
+		if(mag.isOn)
+		{
+			drawCircle(frontCx, magOnCol, mag.sx, mag.sy, mag.sr);
+		}
+		else
+		{
+			mag.tR -= dt * 20;
+			if(mag.tR < 3) mag.tR = mag.sr;
+			strokeCircle(frontCx, magRingCol, actW/100, false, mag.sx, mag.sy, mag.tR, mag.sr);
+		}
+	}
+	
+	if(player.state !== playing)
+	{
+		frontCx.fillStyle = 'RGB(255,255,255)';
+		frontCx.globalAlpha = .3;
+		frontCx.fillRect(offX, offY, actW, actH);
+	}
+	
+	
+	
+	
+		
 }
 
 	
@@ -252,7 +334,7 @@ function updateClick(event)
 
 function pos(event)
 {
-	if((event.type === 'mousedown' || event.type === 'touchstart') && player.state === dying) 
+	if((event.type === 'mousedown' || event.type === 'touchstart') && (player.state === dying || player.state === winning)) 
 	{
 		loadLevel();
 	}
@@ -346,22 +428,24 @@ function updateFrame()
 		else if(player.spos.x < 0) player.vel.x = Math.abs(player.vel.x)
 		if(player.spos.y > actH) player.vel.y = -Math.abs(player.vel.y)
 		else if(player.spos.y < 0) player.vel.y = Math.abs(player.vel.y) */
-		drawPlayer();
+		
 		checkStatus();
 	}
-	
+	drawFrame(dt);
 	
 	
 	requestAnimationFrame(updateFrame);
 }
 
+	
+
 function checkStatus()
 {
-	if(distance(player.spos.x, player.spos.y, worm.sx, worm.sy) <= (worm.sr - player.sr))
+	if(distance(player.spos.x, player.spos.y, worm.sx, worm.sy) <= (worm.sr - player.sr + AID))
 	{
 		player.state = winning;
-		levelInd++;
-		loadLevel();
+		if(++levelInd < levels.length) loadLevel();
+
 	}
 	else
 	{
@@ -377,6 +461,11 @@ function checkStatus()
 			}
 		}
 		
+	}
+	if(player.state !== playing)
+	{
+		player.vel.x = 0;
+		player.vel.y = 0;
 	}
 		
 }
