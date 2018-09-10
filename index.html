@@ -275,6 +275,10 @@ function updateFrame()
 	player.vel.y += fy * dt;
 	player.spos.x += player.vel.x * dt;
 	player.spos.y += player.vel.y * dt;
+	if(player.spos.x > actW) player.vel.x = -Math.abs(player.vel.x)
+	else if(player.spos.x < 0) player.vel.x = Math.abs(player.vel.x)
+	if(player.spos.y > actH) player.vel.y = -Math.abs(player.vel.y)
+	else if(player.spos.y < 0) player.vel.y = Math.abs(player.vel.y)
 	drawPlayer();
 			
 
