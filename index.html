@@ -27,7 +27,7 @@ const AID = 3;
 const playing = 0;
 const winning = 1;
 const dying = 2;
-const R = -10000;
+const R = -100;
 const screenR = .635;
 const screenW = (window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth);
 const screenH = (window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight);
@@ -179,10 +179,26 @@ var levels = [
 	],
 	
 	[
+		[[25,15,20],
+		[70,15, 5]],
+		
+		[50,30,6],
+		[50,85,3]
+	],
+	
+	[
 		[[20,80,10],
 		[70,15, 15]],
 		
 		[50,30,6],
+		[50,85,3]
+	],
+	
+	[
+		[[30,50,10],
+		[80,15, 15]],
+		
+		[30,30,6],
 		[50,85,3]
 	],
 	
@@ -211,10 +227,22 @@ var levels = [
 		[50,10,6],
 		[50,90,3]
 	],
+	
+	[
+		[[60,20, 10],
+		[40, 40, 10],
+		[60,60, 10],
+		[70, 40, 10],
+		[40,80, 10],
+		[30,60, 10]],
+		
+		[50,10,6],
+		[50,90,3]
+	],
 		
 ];
 var lastTime;
-var levelInd = 5;
+var levelInd = 0;
 loadLevel();
 function loadLevel()
 {
@@ -285,7 +313,7 @@ function drawFrame(dt)
 	frontCx.clearRect(0, 0, screenW, screenH);
 	
 
-	worm.tr -= dt * 10;
+	worm.tr -= dt * 7;
 	if(worm.tr < 0) worm.tr = worm.sr;
 	var tr = worm.tr;
 	while(tr > 0)
@@ -424,7 +452,7 @@ function updateFrame()
 				var dx = player.spos.x - mag.sx;
 				var dy = player.spos.y - mag.sy;
 				var d = Math.pow(Math.pow(dx, 2) + Math.pow(dy, 2), 1/2);
-				var fMag = R * mag.sr / Math.pow(d, 1.4);
+				var fMag = R * Math.pow(mag.sr, 2) / Math.pow(d, 1.4);
 				var theta = Math.atan2(dy, dx);
 				fx += Math.cos(theta) * fMag;
 				fy += Math.sin(theta) * fMag;
