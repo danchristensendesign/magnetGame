@@ -17,6 +17,7 @@
 
 <script>
 
+const R = -10000;
 const screenR = .635;
 const screenW = (window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth);
 const screenH = (window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight);
@@ -73,7 +74,7 @@ function magnet(arr){
 	this.sy = gameToScreen(arr[1], false);
 	this.sr = gameToScreen(arr[2], true);
 	
-	this.on = false;
+	this.isOn = false;
 }
 
 var magnets = {
@@ -144,7 +145,8 @@ var worm = {
 };
 
 var magDefs = [
-	[50,15,15],
+	[30,15,15],
+	[70,15, 15]
 
 ];
 var playerDef = [50,85,3];
@@ -153,6 +155,8 @@ var wormDef = [50,30,6];
 player.init(playerDef);
 magnets.init(magDefs);
 worm.init(wormDef);
+//player.vel.y = -100;
+var lastTime = new Date().getTime();
 drawT();
 
 function drawT()
@@ -162,7 +166,6 @@ function drawT()
 	{
 		drawCircle(midCx, magnets.arr[i].sx, magnets.arr[i].sy, magnets.arr[i].sr);
 	}
-	drawCircle(midCx, player.spos.x, player.spos.y, player.sr);
 	drawCircle(midCx, worm.sx, worm.sy, worm.sr);
 }
 
@@ -172,6 +175,14 @@ function drawCircle(cx, x, y, r)
 	cx.arc(x + offX , y + offY, r, 0, 2 * Math.PI);
 	cx.fill();
 }
+
+function drawPlayer()
+{
+	frontCx.fillStyle = 'RGB(255,255,255)';
+	frontCx.clearRect(0, 0, screenW, screenH);
+	drawCircle(frontCx, player.spos.x, player.spos.y, player.sr);
+}
+
 	
 function updateHover(event)
 {
@@ -189,18 +200,35 @@ function pos(event)
 	if(event.type.substr(0,5) === 'mouse')
 	{
 		//console.log('a');
-		drawIt([event.clientX, event.clientY]);
+		checkIt([event.clientX - offX, event.clientY - offY]);
 	}
 	else
 	{
 		for (i=0; i < event.touches.length; i++) 
 		{  
-			drawIt([event.touches[i].pageX, event.touches[i].pageY]);
+			checkIt([event.touches[i].pageX - offX, event.touches[i].pageY - offY]);
 		}
 	}	
 }
 
-function drawIt(xy)
+function checkIt(arr)
+{
+	for(var i = 0; i < magnets.arr.length; i+=1 )
+	{
+		var mag = magnets.arr[i];
+		if(distance(arr[0], arr[1], mag.sx, mag.sy) <= mag.sr)
+		{
+			mag.isOn = true;
+			console.log('on');
+		}
+		else
+		{
+			mag.isOn = false;
+			console.log('off');
+		}
+	}
+}
+/* function drawIt(xy)
 {
 	if(xy[0] > offX && xy[0] < (screenW - offX) && xy[1] > offY && xy[1] < (screenH - offY))
 	{
@@ -210,12 +238,53 @@ function drawIt(xy)
 		frontCx.fill();
 	}
 	console.log("d");
-}
+} */
 
 backCx.fillStyle = 'RGB(0,0,0)';
 backCx.fillRect(offX,offY,actW, actH);
 
+requestAnimationFrame(updateFrame);
 
+
+
+function updateFrame()
+{
+	var newTime = new Date().getTime();
+	var dt = (newTime - lastTime)/1000;
+	lastTime = newTime;
+	
+	//sum forces on player
+	var fx = 0;
+	var fy = 0;
+	
+	for(var i = 0; i < magnets.arr.length; i+=1 )
+	{
+		if(magnets.arr[i].isOn)
+		{
+			var mag = magnets.arr[i];
+			var dx = player.spos.x - mag.sx;
+			var dy = player.spos.y - mag.sy;
+			var d = Math.pow(Math.pow(dx, 2) + Math.pow(dy, 2), 1/2);
+			var fMag = R * mag.sr / Math.pow(d, 1.4);
+			var theta = Math.atan2(dy, dx);
+			fx += Math.cos(theta) * fMag;
+			fy += Math.sin(theta) * fMag;
+		}
+	}
+	player.vel.x += fx * dt;
+	player.vel.y += fy * dt;
+	player.spos.x += player.vel.x * dt;
+	player.spos.y += player.vel.y * dt;
+	drawPlayer();
+			
+
+	requestAnimationFrame(updateFrame);
+}
+
+function distance(x1, y1, x2, y2)
+{
+	return Math.pow(Math.pow(x2-x1, 2) + Math.pow(y2-y1, 2), 1/2);
+}
 </script>
 
 </body>
