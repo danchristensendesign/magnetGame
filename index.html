@@ -63,12 +63,13 @@ var isGoing = false;
 
 function touchMove(e) {
     //e.preventDefault(); 
-	updateHover(e);
+	updateClick(e);
 };
 
-document.addEventListener("touchmove", touchMove, {passive: false});
+//document.addEventListener("touchmove", touchMove, {passive: false});
 document.addEventListener("touchstart", updateClick);
 document.addEventListener("touchend", updateClick);
+document.addEventListener("touchmove", updateClick);
 
 
 function updateClick(event)
