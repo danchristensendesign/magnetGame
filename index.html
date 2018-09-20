@@ -42,7 +42,7 @@ const offY = (screenH - actH)/2;
 
 var backCanv = document.getElementById("backCanv");
 backCanv.width = screenW;
-backCanv.height = screenH;
+backCanv.height = screenH + 300;
 var backCx = backCanv.getContext("2d");
 
 var midCanv = document.getElementById("midCanv");
@@ -253,7 +253,7 @@ function startGame()
 	{
 		setTimeout(function () 
 		{
-			backCanv.height += 60;
+			//backCanv.height += 60;
 			window.scrollTo(0, 50);
 			scrolled = 1;
 			loadLevel();
@@ -402,7 +402,7 @@ function pos(event)
 	//console.log(player.state);
 	if(event.type === 'mousedown' || event.type === 'touchstart')
 	{
-		scrolled = (scrolled)? 0 : 50;
+		scrolled = (scrolled)? 0 : 200;
 		window.scrollTo(0, scrolled);
 		return;
 	}
