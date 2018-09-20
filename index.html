@@ -254,7 +254,7 @@ function startGame()
 		setTimeout(function () 
 		{
 			backCanv.height += 60;
-			window.scrollTo(0, 1);
+			window.scrollTo(0, 50);
 			scrolled = 1;
 			loadLevel();
 			
@@ -402,7 +402,7 @@ function pos(event)
 	//console.log(player.state);
 	if(event.type === 'mousedown' || event.type === 'touchstart')
 	{
-		scrolled = (scrolled)? 0 : 1;
+		scrolled = (scrolled)? 0 : 50;
 		window.scrollTo(0, scrolled);
 		return;
 	}
