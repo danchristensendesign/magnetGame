@@ -27,6 +27,7 @@ const AID = 3;
 const playing = 0;
 const winning = 1;
 const dying = 2;
+const won = 3;
 const R = -100;
 const screenR = .635;
 const screenW = (window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth);
@@ -242,8 +243,23 @@ var levels = [
 		
 ];
 var lastTime;
-var levelInd = 0;
-loadLevel();
+var levelInd = 4;
+startGame();
+
+function startGame()
+{
+	
+	document.body.onload = function()
+	{
+		setTimeout(function () 
+		{
+			window.scrollTo(0, 1);
+			loadLevel();
+			
+		}, 0);
+	}
+}
+
 function loadLevel()
 {
 	if(levelInd >= levels.length) levelInd = levels.length - 1;
@@ -345,7 +361,7 @@ function drawFrame(dt)
 		}
 	}
 	
-	if(player.state !== playing)
+	if(player.state !== playing && player.state !== winning)
 	{
 		if(player.state === dying)
 		{
@@ -357,7 +373,8 @@ function drawFrame(dt)
 			frontCx.fillStyle = wormRingCol;
 			frontCx.globalAlpha = .6;
 		}
-		frontCx.fillRect(offX, offY, actW, actH);
+		//frontCx.fillRect(offX, offY, actW, actH);
+		frontCx.fillRect(0, 0, screenW, screenH);
 	}
 	
 	
@@ -380,9 +397,10 @@ function updateClick(event)
 
 function pos(event)
 {
-	if((event.type === 'mousedown' || event.type === 'touchstart') && player.state !== playing)
+	//console.log(player.state);
+	if((event.type === 'mousedown' || event.type === 'touchstart') && (player.state === dying || player.state === won))
 	{
-		if(player.state == winning) levelInd = 0;
+		if(player.state == won) levelInd = 0;
 		loadLevel();
 		
 	}
@@ -436,8 +454,8 @@ function checkIt(arr)
 } */
 
 backCx.fillStyle = 'RGB(0,0,0)';
-backCx.fillRect(offX,offY,actW, actH);
-
+//backCx.fillRect(offX,offY,actW, actH);
+backCx.fillRect(0,0,screenW, screenH);
 requestAnimationFrame(updateFrame);
 
 
@@ -449,11 +467,23 @@ function updateFrame()
 	lastTime = newTime;
 	
 	//sum forces on player
-	if(player.state === playing)
+	if(player.state === playing || player.state === winning)
 	{
 		var fx = 0;
 		var fy = 0;
 		
+		if(player.state === winning)
+		{
+			var dx = player.spos.x - worm.sx;
+			var dy = player.spos.y - worm.sy;
+			//var fMag = -2000;
+			var d = Math.pow(Math.pow(dx, 2) + Math.pow(dy, 2), 1/2);
+			var fMag = R * Math.pow(1, 2) * Math.pow(d, 1.4);
+			var theta = Math.atan2(dy, dx);
+			fx += Math.cos(theta) * fMag;
+			fy += Math.sin(theta) * fMag;
+		}
+			
 		for(var i = 0; i < magnets.arr.length; i+=1 )
 		{
 			if(magnets.arr[i].isOn)
@@ -472,6 +502,7 @@ function updateFrame()
 		player.vel.y += fy * dt;
 		player.spos.x += player.vel.x * dt;
 		player.spos.y += player.vel.y * dt;
+		//console.log(fy);
 		/* if(player.spos.x > actW) player.vel.x = -Math.abs(player.vel.x)
 		else if(player.spos.x < 0) player.vel.x = Math.abs(player.vel.x)
 		if(player.spos.y > actH) player.vel.y = -Math.abs(player.vel.y)
@@ -489,15 +520,30 @@ function updateFrame()
 
 function checkStatus()
 {
-	if(distance(player.spos.x, player.spos.y, worm.sx, worm.sy) <= (worm.sr - player.sr + AID))
+	var wormR = distance(player.spos.x, player.spos.y, worm.sx, worm.sy);
+	
+	//check for fully entered worm
+	if(player.state === winning && wormR < 5)
+	{
+		player.state = won;
+		if(++levelInd < levels.length) loadLevel();
+	}
+
+	else if(wormR <= (worm.sr + player.sr + AID))
 	{
 		player.state = winning;
-		if(++levelInd < levels.length) loadLevel();
-
+		
 	}
+		/* if(distance(player.spos.x, player.spos.y, worm.sx, worm.sy) <= (worm.sr - player.sr + AID))
+		{
+			player.state = winning;
+			if(++levelInd < levels.length) loadLevel();
+
+		} */
 	else
 	{
-		if(player.spos.x > actW - player.sr || player.spos.x < 0 + player.sr || player.spos.y > actH - player.sr || player.spos.y < + player.sr) player.state = dying;
+		/* if(player.spos.x > actW - player.sr || player.spos.x < 0 + player.sr || player.spos.y > actH - player.sr || player.spos.y < + player.sr) player.state = dying; */
+		if(player.spos.x+offX > screenW - player.sr || player.spos.x+offX < 0 + player.sr || player.spos.y+offY > screenH - player.sr || player.spos.y+offY < + player.sr) player.state = dying;
 		else
 		{
 			for(var i = 0; i < magnets.arr.length; i+=1 )
@@ -510,7 +556,7 @@ function checkStatus()
 		}
 		
 	}
-	if(player.state !== playing)
+	if(player.state !== playing && player.state !== winning)
 	{
 		player.vel.x = 0;
 		player.vel.y = 0;
