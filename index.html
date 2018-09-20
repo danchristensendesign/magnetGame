@@ -245,7 +245,7 @@ var levels = [
 var lastTime;
 var levelInd = 4;
 startGame();
-
+var scrolled = 0;
 function startGame()
 {
 	
@@ -254,6 +254,7 @@ function startGame()
 		setTimeout(function () 
 		{
 			window.scrollTo(0, 1);
+			scrolled = 1;
 			loadLevel();
 			
 		}, 0);
@@ -398,6 +399,14 @@ function updateClick(event)
 function pos(event)
 {
 	//console.log(player.state);
+	if(event.type === 'mousedown' || event.type === 'touchstart')
+	{
+		scrolled = (scrolled)? 0 : 1;
+		window.scrollTo(0, scrolled);
+		return;
+	}
+		
+	
 	if((event.type === 'mousedown' || event.type === 'touchstart') && (player.state === dying || player.state === won))
 	{
 		if(player.state == won) levelInd = 0;
