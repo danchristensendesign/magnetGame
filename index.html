@@ -107,7 +107,7 @@ function pos(event)
 						var tp = window.pageYOffset || document.documentElement.scrollTop;
 						
 						var delY = event.touches[i].pageY - lastY;
-						if(delY < 0)
+						if(delY <= 0)
 						{
 							if(curH > maxH)
 							{
