@@ -60,6 +60,8 @@ document.addEventListener("mousemove", updateClick);
 document.addEventListener("mousedown", updateClick);
 document.addEventListener("mouseup", updateClick);
 var isGoing = false;
+var maxH = screenH;
+var lastY = null;
 
 function touchMove(e) {
     //e.preventDefault(); 
@@ -92,7 +94,46 @@ function pos(event)
 		{
 			for (i=0; i < event.touches.length; i++) 
 			{  
-				checkIt([event.touches[i].pageX - offX, event.touches[i].pageY - offY]);
+				if(event.type === "touchend")
+				{
+					lastY = null;
+				}
+				else
+				{
+					var state = "";
+					if(lastY !== null)
+					{
+						var curH = (window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight);
+						var tp = window.pageYOffset || document.documentElement.scrollTop;
+						
+						var delY = event.touches[i].pageY - lastY;
+						if(delY < 0)
+						{
+							if(curH > maxH)
+							{
+								maxH = curH;
+								state = "growing";
+							}
+							else 
+							{
+								e.preventDefault();
+								state = "started";
+							}
+						}
+						else
+						{
+							state = "shrinking";
+						}
+						
+					}
+					lastY = event.touches[i].pageY;
+					backCx.clearRect(0,0, backCanv.width, backCanv.height);
+					backCx.font="30px Verdana"
+					backCx.beginPath();
+					backCx.strokeStyle = 'RGB(0,0,0)';
+					backCx.strokeText(state +  ', ' + curH, 10, 400 + tp);
+				}
+				
 			}
 		}	
 	}
