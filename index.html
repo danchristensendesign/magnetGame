@@ -200,6 +200,10 @@ function updateClick(event)
 animate();
 var off = 0;
 var inc = 1;
+var rectLW = screenW/3;
+var rectH = screenH* .6;
+var rectT = screenH* .2;
+var boxH = 200;
 function animate()
 {
 	var curH = (window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight);
@@ -216,8 +220,8 @@ function animate()
 	backCx.strokeText(animStr, 10, 400 + tp + off);
 	if((off > 100 && inc > 0) || (off < -100 && inc < 0)) inc = -inc;
 	off += inc;
-	backCx.strokeRect(10, 300 + tp, 200, 500);
-	backCx.fillRect(10, 300 - tp + 400, 200, 100);
+	backCx.strokeRect(rectLW, rectT + tp, rectLW, rectH);
+	backCx.fillRect(rectLW, rectT + rectH - boxH - tp, rectLW, boxH);
 	requestAnimationFrame(animate);
 
 }
