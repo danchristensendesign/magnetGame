@@ -74,6 +74,8 @@ var animStr = "waiting";
 
 function updateClick(event)
 {
+	var curH = (window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight);
+	
 	if(event.type === "touchend")
 	{
 		if(maxFound && curH === maxH)
@@ -89,7 +91,7 @@ function updateClick(event)
 		return;
 	}
 	
-	var curH = (window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight);
+	
 	if(isPlaying)
 	{
 		switch(event.type)
