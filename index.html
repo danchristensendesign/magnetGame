@@ -217,9 +217,9 @@ function animate()
 	backCx.font="30px Verdana"
 	backCx.beginPath();
 	backCx.strokeStyle = 'RGB(0,0,0)';
-	backCx.strokeText(animStr, 10, 400 + tp + off);
-	if((off > 100 && inc > 0) || (off < -100 && inc < 0)) inc = -inc;
-	off += inc;
+	//backCx.strokeText(animStr, 10, 400 + tp + off);
+	//if((off > 100 && inc > 0) || (off < -100 && inc < 0)) inc = -inc;
+	//off += inc;
 	backCx.strokeRect(rectLW, rectT + tp, rectLW, rectH);
 	backCx.fillRect(rectLW, Math.min(rectT + tp + rectH - boxH, Math.max(rectT + tp, rectT + rectH - boxH - tp)), rectLW, boxH);
 	requestAnimationFrame(animate);
