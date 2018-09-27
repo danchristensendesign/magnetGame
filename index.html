@@ -166,7 +166,8 @@ function updateClick(event)
 	}
 }
 animate();
-
+var off = 0;
+var inc = 1;
 function animate()
 {
 	var tp = window.pageYOffset || document.documentElement.scrollTop;
@@ -174,7 +175,9 @@ function animate()
 	backCx.font="30px Verdana"
 	backCx.beginPath();
 	backCx.strokeStyle = 'RGB(0,0,0)';
-	backCx.strokeText(animStr, 10, 400 + tp);
+	backCx.strokeText(animStr, 10, 400 + tp + off);
+	if((off > 100 && inc > 0) || (off < -100 && inc < 0)) inc = -inc;
+	off += inc;
 	requestAnimationFrame(animate);
 
 }
