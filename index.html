@@ -221,7 +221,7 @@ function animate()
 	if((off > 100 && inc > 0) || (off < -100 && inc < 0)) inc = -inc;
 	off += inc;
 	backCx.strokeRect(rectLW, rectT + tp, rectLW, rectH);
-	backCx.fillRect(rectLW, rectT + rectH - boxH - tp, rectLW, boxH);
+	backCx.fillRect(rectLW, Math.min(rectT + tp, rectT + rectH - boxH - tp), rectLW, boxH);
 	requestAnimationFrame(animate);
 
 }
