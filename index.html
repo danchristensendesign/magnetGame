@@ -216,6 +216,8 @@ function animate()
 	backCx.strokeText(animStr, 10, 400 + tp + off);
 	if((off > 100 && inc > 0) || (off < -100 && inc < 0)) inc = -inc;
 	off += inc;
+	backCx.strokeRect(10, 300 + tp, 200, 500);
+	backCx.fillRect(10, 300 - tp + 400, 200, 100);
 	requestAnimationFrame(animate);
 
 }
