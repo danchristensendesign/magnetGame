@@ -74,6 +74,21 @@ var animStr = "waiting";
 
 function updateClick(event)
 {
+	if(event.type === "touchend")
+	{
+		if(maxFound && curH === maxH)
+		{
+			animStr = "playing";
+			isPlaying = true;
+		}
+		else
+		{
+			isPlaying = false;
+			animStr = "paused, waiting";
+		}
+		return;
+	}
+	
 	var curH = (window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight);
 	if(isPlaying)
 	{
@@ -157,13 +172,7 @@ function updateClick(event)
 				
 				break;
 				
-			case "touchend":
-				if(maxFound && curH === maxH)
-				{
-					animStr = "playing";
-					isPlaying = true;
-				}
-				break;
+			
 		
 		}
 	}
