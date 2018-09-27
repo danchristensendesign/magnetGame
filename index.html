@@ -71,7 +71,7 @@ document.addEventListener("touchend", updateClick);
 document.addEventListener("touchmove", updateClick);
 
 var animStr = "waiting";
-var outH =  window.outerHeight;
+
 
 function updateClick(event)
 {
@@ -86,6 +86,7 @@ function updateClick(event)
 		}
 		else
 		{
+			var outH =  window.outerHeight;
 			isPlaying = false;
 			animStr = curH + ', ' + maxH + ', ' + outH + " paused, waiting";
 		}
