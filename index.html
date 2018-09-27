@@ -78,7 +78,7 @@ function updateClick(event)
 	
 	if(event.type === "touchend")
 	{
-		if(maxFound && curH === maxH)
+		if(maxFound && curH >= maxH)
 		{
 			animStr = "playing";
 			isPlaying = true;
@@ -185,8 +185,8 @@ var inc = 1;
 function animate()
 {
 	var curH = (window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight);
-	isPlaying = (maxFound && curH === maxH);
-	if(isPlaying) animStr = "playing";
+	//isPlaying = (maxFound && curH === maxH);
+	//if(isPlaying) animStr = "playing";
 	var tp = window.pageYOffset || document.documentElement.scrollTop;
 	backCx.clearRect(0, 0, backCanv.width, backCanv.height);
 	backCx.font="30px Verdana"
