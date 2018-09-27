@@ -84,10 +84,10 @@ function updateClick(event)
 	{
 		isTouch = false;
 	}
-	else if(event.type === "touchstart" )
+	/* else if(event.type === "touchstart" )
 	{
 		window.scrollTo(0, 0);
-	}
+	} */
 	else
 	{
 		isTouch = true;
@@ -212,7 +212,7 @@ function animate()
 	else animStr = "paused";
 	//isPlaying = (maxFound && curH === maxH);
 	//if(isPlaying) animStr = "playing";
-	var tp = window.pageYOffset || document.documentElement.scrollTop;
+	var tp = window.pageYOffset || document.documentElement.scrollTop + curH - screenH;
 	backCx.clearRect(0, 0, backCanv.width, backCanv.height);
 	backCx.font="30px Verdana"
 	backCx.beginPath();
