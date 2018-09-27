@@ -59,27 +59,133 @@ var frontCx = frontCanv.getContext("2d");
 document.addEventListener("mousemove", updateClick);
 document.addEventListener("mousedown", updateClick);
 document.addEventListener("mouseup", updateClick);
-var isGoing = false;
+var isPlaying = false;
+var maxHfound = false;
 var maxH = screenH;
 var lastY = null;
 
-function touchMove(e) {
-    //e.preventDefault(); 
-	updateClick(e);
-};
 
 //document.addEventListener("touchmove", touchMove, {passive: false});
 document.addEventListener("touchstart", updateClick);
 document.addEventListener("touchend", updateClick);
 document.addEventListener("touchmove", updateClick);
 
+var animStr = "waiting";
 
 function updateClick(event)
 {
-	pos(event);
+	var curH = (window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight);
+	if(isPlaying)
+	{
+		switch(event.type)
+		{
+			case "touchstart": 
+				animStr = "possible pause";
+				break;
+				
+			case "touchmove":
+				if(curH < maxH) 
+				{
+					animStr = "leading to pause";
+				}
+				else
+				{
+					animStr = "ready to play";
+				}
+				break;
+				
+			case "touchend":
+				if(curH < maxH)
+				{
+					animStr = "paused";
+					isPlaying = false;
+				}
+				else
+				{
+					animStr = "playing";
+				}
+				break;
+		}
+	}
+	else
+	{
+		var delY = event.touches[0].pageY - lastY;
+		lastY = event.touches[0].pageY;
+		switch(event.type)
+		{
+			case "touchstart": 
+				animStr = "possible start";
+				
+				break;
+				
+			case "touchmove":
+				if(!maxFound)
+				{
+					if(delY < 0)
+					{
+						if(curH > maxH)
+						{
+							maxH = curH;
+							animStr = "growing";
+						}
+						else if(curH === maxH && curH > screenH) 
+						{
+							maxFound = true;
+							animStr = "max found";
+						}
+						else
+						{
+							animStr = "maybe growing";
+						}
+					}
+					else
+					{
+						animStr = "maybe growing maybe not";
+					}
+				}
+				else if(curH === maxH)
+				{
+					animStr = "ready to play";
+				}
+				else
+				{
+					animStr = "leading to pause";
+				}
+				
+				break;
+				
+			case "touchend":
+				if(maxFound && curH === maxH)
+				{
+					animStr = "playing";
+					isPlaying = true;
+				}
+				break;
+		
+		}
+	}
+}
+animate();
+
+function animate()
+{
+	var tp = window.pageYOffset || document.documentElement.scrollTop;
+	backCx.clearRect(0, 0, backCanv.width, backCanv.height);
+	backCx.font="30px Verdana"
+	backCx.beginPath();
+	backCx.strokeStyle = 'RGB(0,0,0)';
+	backCx.strokeText(animStr, 10, 400 + tp);
+	requestAnimationFrame(animate);
+
 }
 
-function pos(event)
+
+/* function updateClick(event)
+{
+	pos(event);
+} */
+
+/* function pos(event)
 {
 
 		
@@ -152,9 +258,9 @@ function checkIt(arr)
 		{
 			mag.isOn = false;
 			console.log('off');
-		} */
+		} 
 	
-}
+} */
 
 </script>
 
