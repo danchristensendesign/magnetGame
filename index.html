@@ -77,13 +77,13 @@ function updateClick(event)
 {
 	//var curH = (window.innerHeight);// || document.documentElement.clientHeight || document.body.clientHeight);
 	
-	if(event.touches)
+	if(event.type === "touchend")
 	{
-		isTouch = true;
+		isTouch = false;
 	}
 	else
 	{
-		isTouch = false;
+		isTouch = true;
 	}
 	
 /* 	if(event.type === "touchend")
