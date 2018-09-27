@@ -42,7 +42,7 @@ const offY = (screenH - actH)/2;
 
 var backCanv = document.getElementById("backCanv");
 backCanv.width = screenW;
-backCanv.height = screenH + 100;
+backCanv.height = screenH + 200;
 var backCx = backCanv.getContext("2d");
 
 var midCanv = document.getElementById("midCanv");
@@ -83,6 +83,10 @@ function updateClick(event)
 	if(event.type === "touchend")
 	{
 		isTouch = false;
+	}
+	else if(event.type === "touchstart" && isPlaying)
+	{
+		window.scrollTo(0, 0);
 	}
 	else
 	{
