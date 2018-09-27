@@ -198,6 +198,7 @@ function animate()
 	var curH = (window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight);
 	if(isTouch) animStr = "toggling";
 	else if(curH > screenH) animStr = "playing";
+	else animStr = "paused";
 	//isPlaying = (maxFound && curH === maxH);
 	//if(isPlaying) animStr = "playing";
 	var tp = window.pageYOffset || document.documentElement.scrollTop;
