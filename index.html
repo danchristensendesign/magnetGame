@@ -203,7 +203,7 @@ var inc = 1;
 var rectLW = screenW/3;
 var rectH = screenH* .6;
 var rectT = screenH* .2;
-var boxH = 200;
+var boxH = rectH - 200;
 function animate()
 {
 	var curH = (window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight);
@@ -212,7 +212,7 @@ function animate()
 	else animStr = "paused";
 	//isPlaying = (maxFound && curH === maxH);
 	//if(isPlaying) animStr = "playing";
-	var tp = (window.pageYOffset || document.documentElement.scrollTop) + curH - screenH;
+	var tp = (window.pageYOffset || document.documentElement.scrollTop);
 	backCx.clearRect(0, 0, backCanv.width, backCanv.height);
 	backCx.font="30px Verdana"
 	backCx.beginPath();
