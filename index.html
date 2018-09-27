@@ -109,8 +109,11 @@ function updateClick(event)
 	}
 	else
 	{
-		var delY = event.touches[0].pageY - lastY;
-		lastY = event.touches[0].pageY;
+		if(event.touches)
+		{
+			var delY = event.touches[0].pageY - lastY;
+			lastY = event.touches[0].pageY;
+		}
 		switch(event.type)
 		{
 			case "touchstart": 
