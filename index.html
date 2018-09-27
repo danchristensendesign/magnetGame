@@ -16,7 +16,7 @@
 
 
 <script>
-
+const scrollAmt = 100;
 const playerCol = 'RGB(230,230,230)';
 const magOffCol = 'RGB(111,183,214)';
 const magOnCol = 'RGB(133,292,93)';
@@ -42,7 +42,7 @@ const offY = (screenH - actH)/2;
 
 var backCanv = document.getElementById("backCanv");
 backCanv.width = screenW;
-backCanv.height = screenH + 200;
+backCanv.height = screenH + scrollAmt;
 var backCx = backCanv.getContext("2d");
 
 var midCanv = document.getElementById("midCanv");
@@ -203,7 +203,7 @@ var inc = 1;
 var rectLW = screenW/3;
 var rectH = screenH* .6;
 var rectT = screenH* .2;
-var boxH = rectH - 200;
+var boxH = rectH - scrollAmt;
 function animate()
 {
 	var curH = (window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight);
