@@ -184,6 +184,9 @@ var off = 0;
 var inc = 1;
 function animate()
 {
+	var curH = (window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight);
+	isPlaying = (maxFound && curH === maxH);
+	if(isPlaying) animStr = "playing";
 	var tp = window.pageYOffset || document.documentElement.scrollTop;
 	backCx.clearRect(0, 0, backCanv.width, backCanv.height);
 	backCx.font="30px Verdana"
