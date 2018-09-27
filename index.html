@@ -63,7 +63,7 @@ var isPlaying = false;
 var maxFound = false;
 var maxH = screenH;
 var lastY = null;
-
+var isTouch = false;
 
 //document.addEventListener("touchmove", touchMove, {passive: false});
 document.addEventListener("touchstart", updateClick);
@@ -75,9 +75,18 @@ var animStr = "waiting";
 
 function updateClick(event)
 {
-	var curH = (window.innerHeight);// || document.documentElement.clientHeight || document.body.clientHeight);
+	//var curH = (window.innerHeight);// || document.documentElement.clientHeight || document.body.clientHeight);
 	
-	if(event.type === "touchend")
+	if(event.touches)
+	{
+		isTouch = true;
+	}
+	else
+	{
+		isTouch = false;
+	}
+	
+/* 	if(event.type === "touchend")
 	{
 		if(maxFound && curH >= maxH)
 		{
@@ -179,7 +188,7 @@ function updateClick(event)
 			
 		
 		}
-	}
+	} */
 }
 animate();
 var off = 0;
@@ -187,6 +196,8 @@ var inc = 1;
 function animate()
 {
 	var curH = (window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight);
+	if(isTouch) animStr = "toggling";
+	else if(curH > screenH) animStr = "playing";
 	//isPlaying = (maxFound && curH === maxH);
 	//if(isPlaying) animStr = "playing";
 	var tp = window.pageYOffset || document.documentElement.scrollTop;
