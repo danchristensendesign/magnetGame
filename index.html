@@ -95,14 +95,23 @@ function updateClick(e)
 		isTouch = false;
 	}
 	else  */
-	if(e.type === "touchstart")
+	/* if(e.type === "touchstart")
 	{
 		ignoreDef = (curH > screenH && (e.touches[i].pageY > 100 || e.touches[i].pageX > 100));
 		midCx.clearRect(0, 0, midCanv.width, midCanv.height);
 		midCx.beginPath();	
-		midCx.strokeText(ignoreDef, e.touches[0].pageX, 600);
-	}
+		midCx.strokeText(ignoreDef, e.touches[0].pageX, 400);
+	} */
 	midCx.fillStyle = 'RGB(0, 0, 0)';
+	
+
+	{
+
+		midCx.clearRect(0, 0, midCanv.width, midCanv.height);
+		midCx.beginPath();	
+		midCx.strokeText(e.type, e.touches[0].pageX, 400);
+	}
+	
 	//if(ignoreDef) e.preventDefault();
 	/* if(e.touches)
 	{
