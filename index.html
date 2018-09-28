@@ -82,9 +82,10 @@ setTimeout(function () {
 	actW = (actH *screenR);
 	backCanv.height = screenH + scrollAmt;
 	midCanv.height = screenH + scrollAmt;
+	animate();
 }, 300);
 
-var ignoreDef = false;
+var toggling = false;
 
 function updateClick(e)
 {
@@ -110,13 +111,14 @@ function updateClick(e)
 	if(e.type === "touchstart")
 	{
 		var tp = (window.pageYOffset || document.documentElement.scrollTop);
-		ignoreDef = (curH > screenH && (e.touches[0].pageY > 100+ tp || e.touches[0].pageX > 100));
+		toggling = !(curH > screenH && (e.touches[0].pageY > 100+ tp || e.touches[0].pageX > 100));
 		midCx.beginPath();	
-		if(ignoreDef) midCx.strokeText("ignore", e.touches[0].pageX, 440);
-		else midCx.strokeText("okay", 50, 440);
+		/* if(ignoreDef) midCx.strokeText("ignore", e.touches[0].pageX, 440);
+		else midCx.strokeText("okay", 50, 440); */
 	}
+	else if(e.type === "touchend") toggling = false;
 
-	if(ignoreDef) e.preventDefault();
+	if(!toggling) e.preventDefault();
 
 		
 		
@@ -245,14 +247,18 @@ var rectLW = screenW/3;
 var rectH = screenH* .6;
 var rectT = screenH* .2;
 var boxH = rectH - scrollAmt;
-animate();
+
 
 function animate()
 {
 	var curH = (window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight);
 	
-	//isPlaying = (maxFound && curH === maxH);
-	//if(isPlaying) animStr = "playing";
+	if(!toggling)
+	{
+		isPlaying = (curH > screenH);
+	}
+		//isPlaying = (maxFound && curH === maxH);
+		//if(isPlaying) animStr = "playing";
 	var tp = (window.pageYOffset || document.documentElement.scrollTop);
 	backCx.clearRect(0, 0, backCanv.width, backCanv.height);
 	backCx.font="30px Verdana"
@@ -262,7 +268,7 @@ function animate()
 	//if((off > 100 && inc > 0) || (off < -100 && inc < 0)) inc = -inc;
 	//off += inc;
 	
-	if(curH > screenH)
+	if(isPlaying)
 	{
 		backCx.fillRect(1, tp, 100, 100);
 		
@@ -274,6 +280,20 @@ function animate()
 		backCx.fillRect(rectLW, Math.min(rectT + tp + rectH - boxH, Math.max(rectT + tp, rectT + rectH - boxH - tp)), rectLW, boxH);
 		
 	}
+	
+	
+	/* if(curH > screenH)
+	{
+		backCx.fillRect(1, tp, 100, 100);
+		
+	}
+	else
+	{
+		backCx.strokeRect(rectLW, rectT + tp, rectLW, rectH);
+		backCx.strokeText(curH + ', ' + screenH, rectLW, rectT);
+		backCx.fillRect(rectLW, Math.min(rectT + tp + rectH - boxH, Math.max(rectT + tp, rectT + rectH - boxH - tp)), rectLW, boxH);
+		
+	} */
 	
 	requestAnimationFrame(animate);
 }
