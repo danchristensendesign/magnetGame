@@ -91,7 +91,7 @@ function checkScreen()
 	ctr++;
 	midCx.fillStyle = 'RGB(200, 100, 100)';
 	midCx.beginPath();
-	midCx.strokeText(ctr, 50, (window.pageYOffset || document.documentElement.scrollTop) + 50);
+	midCx.strokeText(ctr + ', ' + forceOut, 50, (window.pageYOffset || document.documentElement.scrollTop) + 50);
 	
 	
 }
