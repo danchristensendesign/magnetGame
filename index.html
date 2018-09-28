@@ -99,9 +99,16 @@ function updateClick(e)
 	{
 		ignoreDef = (curH > screenH && (e.touches[i].pageY > 100 || e.touches[i].pageX > 100));
 	}
-	
+	midCx.fillStyle = 'RGB(0, 0, 0)';
 	if(ignoreDef) e.preventDefault();
-	
+	if(e.touches)
+	{
+		midCx.clearRect(0, 0, midCanv.width, midCanv.height);
+		midCx.beginPath();	
+		midCx.strokeText(ignoreDef, e.touches[0].pageX, e.touches[0].pageY + 50);
+	}
+		
+		
 	
 /* 	if(e.touches)
 	{
