@@ -109,8 +109,8 @@ function updateClick(e)
 
 	if(e.type === "touchstart")
 	{
-		
-		ignoreDef = (curH > screenH && (e.touches[0].pageY > 100 || e.touches[0].pageX > 100));
+		var tp = (window.pageYOffset || document.documentElement.scrollTop);
+		ignoreDef = (curH > screenH && (e.touches[0].pageY > 100+ tp || e.touches[0].pageX > 100));
 		midCx.beginPath();	
 		if(ignoreDef) midCx.strokeText("ignore", e.touches[0].pageX, 440);
 		else midCx.strokeText("okay", 50, 440);
