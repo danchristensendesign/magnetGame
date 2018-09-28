@@ -118,7 +118,11 @@ function updateClick(e)
 		if(ignoreDef) midCx.strokeText("ignore", e.touches[0].pageX, 440);
 		else midCx.strokeText("okay", e.touches[0].pageX, 440);
 	}
-	
+	else
+	{
+		midCx.beginPath();	
+		midCx.strokeText(e.type, e.touches[0].pageX, 440);
+	}
 	//if(ignoreDef) e.preventDefault();
 	/* if(e.touches)
 	{
