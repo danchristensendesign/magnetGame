@@ -95,12 +95,12 @@ function updateClick(event)
 		isTouch = false;
 	}
 	else  */
-	/* if(event.type === "touchstart")
+	if(event.type === "touchstart")
 	{
 		ignoreDef = (curH > screenH && (event.touches[i].pageY > 100 || event.touches[i].pageX > 100));
 	}
 	
-	if(ignoreDef) event.preventDefault(); */
+	if(ignoreDef) event.preventDefault();
 	
 	
 /* 	if(event.touches)
@@ -243,12 +243,12 @@ function animate()
 	//if((off > 100 && inc > 0) || (off < -100 && inc < 0)) inc = -inc;
 	//off += inc;
 	
-	/* if(curH > screenH)
+	if(curH > screenH)
 	{
 		backCx.fillRect(1, tp, 100, 100);
 		
 	}
-	else */
+	else
 	{
 		backCx.strokeRect(rectLW, rectT + tp, rectLW, rectH);
 		backCx.strokeText(curH + ', ' + screenH, rectLW, rectT);
