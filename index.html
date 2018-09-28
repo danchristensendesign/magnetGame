@@ -90,10 +90,22 @@ function updateClick(event)
 	else  */
 	if(event.type === "touchstart")
 	{
-		ignoreDef = (curH <= screenH || (event.touches[i].pageY < 100 && event.touches[i].pageX < 100));
+		ignoreDef = (curH > screenH && (event.touches[i].pageY > 100 || event.touches[i].pageX > 100));
 	}
 	
 	if(ignoreDef) event.preventDefault();
+	
+	midCx.clearRect(0, 0, midCanv.width, midCanv.height);
+	if(event.touches)
+	{
+		var tp = (window.pageYOffset || document.documentElement.scrollTop);
+		midCx.fillStyle = 'RGB(200, 100, 100)';
+		midCx.beginPath();
+		midCx.arc(event.touches[0].pageX, event.touches[0].pageY + top, 9, 0, Math.PI);
+		midCx.fill();
+	}
+		
+	
 
 	
 /* 	if(event.type === "touchend")
@@ -233,6 +245,7 @@ function animate()
 		backCx.fillRect(rectLW, Math.min(rectT + tp + rectH - boxH, Math.max(rectT + tp, rectT + rectH - boxH - tp)), rectLW, boxH);
 		
 	}
+	
 	requestAnimationFrame(animate);
 }
 
