@@ -102,13 +102,14 @@ function updateClick(e)
 		midCx.beginPath();	
 		midCx.strokeText(ignoreDef, e.touches[0].pageX, 400);
 	} */
+	midCx.clearRect(0, 0, midCanv.width, midCanv.height);
 	midCx.fillStyle = 'RGB(0, 0, 0)';
 	
 
 
 	if(e.type === "touchstart")
 	{
-		midCx.clearRect(0, 0, midCanv.width, midCanv.height);
+		
 		ignoreDef = (curH > screenH && (e.touches[0].pageY > 100 || e.touches[0].pageX > 100));
 		midCx.beginPath();	
 		if(ignoreDef) midCx.strokeText("ignore", e.touches[0].pageX, 440);
@@ -116,24 +117,18 @@ function updateClick(e)
 	}
 
 	if(ignoreDef) e.preventDefault();
-	/* if(e.touches)
-	{
-		midCx.clearRect(0, 0, midCanv.width, midCanv.height);
-		midCx.beginPath();	
-		midCx.strokeText(ignoreDef, e.touches[0].pageX, e.touches[0].pageY + 50);
-	} */
+
 		
 		
 	
-/* 	if(e.touches)
+	if(e.touches)
 	{
-		midCx.clearRect(0, 0, midCanv.width, midCanv.height);
 		var tp = (window.pageYOffset || document.documentElement.scrollTop);
 		midCx.fillStyle = 'RGB(200, 100, 100)';
 		midCx.beginPath();
-		midCx.arc(e.touches[0].pageX, e.touches[0].pageY , 9, 0, 2* Math.PI);
+		midCx.arc(e.touches[0].pageX, e.touches[0].pageY , 20, 0, 2* Math.PI);
 		midCx.fill();
-	} */
+	}
 		
 	
 
