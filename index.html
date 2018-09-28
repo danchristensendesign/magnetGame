@@ -243,6 +243,7 @@ function animate()
 	else
 	{
 		backCx.strokeRect(rectLW, rectT + tp, rectLW, rectH);
+		backCx.strokeText(curH + ', ' + screenH, rectLW, rectT);
 		backCx.fillRect(rectLW, Math.min(rectT + tp + rectH - boxH, Math.max(rectT + tp, rectT + rectH - boxH - tp)), rectLW, boxH);
 		
 	}
