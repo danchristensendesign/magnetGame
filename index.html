@@ -97,7 +97,7 @@ function updateClick(event)
 	if(ignoreDef) event.preventDefault(); */
 	
 	
-	if(event.touches)
+/* 	if(event.touches)
 	{
 		midCx.clearRect(0, 0, midCanv.width, midCanv.height);
 		var tp = (window.pageYOffset || document.documentElement.scrollTop);
@@ -105,7 +105,7 @@ function updateClick(event)
 		midCx.beginPath();
 		midCx.arc(event.touches[0].pageX, event.touches[0].pageY , 9, 0, 2* Math.PI);
 		midCx.fill();
-	}
+	} */
 		
 	
 
@@ -214,13 +214,14 @@ function updateClick(event)
 		}
 	} */
 }
-animate();
 var off = 0;
 var inc = 1;
 var rectLW = screenW/3;
 var rectH = screenH* .6;
 var rectT = screenH* .2;
 var boxH = rectH - scrollAmt;
+animate();
+
 function animate()
 {
 	var curH = (window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight);
