@@ -109,7 +109,7 @@ function updateClick(e)
 
 		midCx.clearRect(0, 0, midCanv.width, midCanv.height);
 		midCx.beginPath();	
-		midCx.strokeText(e.type, e.touches[0].pageX, 400);
+		midCx.strokeText(e.type, 50, 400);
 	}
 	if(e.type === "touchstart")
 	{
@@ -117,12 +117,12 @@ function updateClick(e)
 		midCx.beginPath();	
 		//if(ignoreDef) midCx.strokeText("ignore", e.touches[0].pageX, 440);
 		//else 
-			midCx.strokeText("okay", e.touches[0].pageX, 440);
+			midCx.strokeText("okay", 50, 440);
 	}
 	else
 	{
 		midCx.beginPath();	
-		midCx.strokeText(e.type, e.touches[0].pageX, 440);
+		midCx.strokeText(e.type, 50, 440);
 	}
 	//if(ignoreDef) e.preventDefault();
 	/* if(e.touches)
