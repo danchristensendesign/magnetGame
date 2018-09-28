@@ -64,6 +64,7 @@ var maxFound = false;
 var maxH = screenH;
 var lastY = null;
 var isTouch = false;
+var inCorner = false;
 
 //document.addEventListener("touchmove", touchMove, {passive: false});
 document.addEventListener("touchstart", updateClick);
@@ -76,22 +77,24 @@ setTimeout(function () {
   window.scrollTo(0, 1);
 }, 300);
 
+var ignoreDef = false;
+
 function updateClick(event)
 {
-	//var curH = (window.innerHeight);// || document.documentElement.clientHeight || document.body.clientHeight);
+	var curH = (window.innerHeight);// || document.documentElement.clientHeight || document.body.clientHeight);
 	
-	if(event.type === "touchend")
+	/* if(event.type === "touchend")
 	{
 		isTouch = false;
 	}
-	/* else if(event.type === "touchstart" )
+	else  */
+	if(event.type === "touchstart")
 	{
-		window.scrollTo(0, 0);
-	} */
-	else
-	{
-		isTouch = true;
+		ignoreDef = (curH <= screenH || (event.touches[i].pageY < 100 && event.touches[i].pageX < 100));
 	}
+	
+	if(ignoreDef) event.preventDefault();
+
 	
 /* 	if(event.type === "touchend")
 	{
@@ -207,9 +210,7 @@ var boxH = rectH - scrollAmt;
 function animate()
 {
 	var curH = (window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight);
-	if(isTouch) animStr = "toggling";
-	else if(curH > screenH) animStr = "playing";
-	else animStr = "paused";
+	
 	//isPlaying = (maxFound && curH === maxH);
 	//if(isPlaying) animStr = "playing";
 	var tp = (window.pageYOffset || document.documentElement.scrollTop);
@@ -220,10 +221,19 @@ function animate()
 	//backCx.strokeText(animStr, 10, 400 + tp + off);
 	//if((off > 100 && inc > 0) || (off < -100 && inc < 0)) inc = -inc;
 	//off += inc;
-	backCx.strokeRect(rectLW, rectT + tp, rectLW, rectH);
-	backCx.fillRect(rectLW, Math.min(rectT + tp + rectH - boxH, Math.max(rectT + tp, rectT + rectH - boxH - tp)), rectLW, boxH);
+	
+	if(curH > screenH)
+	{
+		backCx.fillRect(0, tp, 100, 100);
+		
+	}
+	else
+	{
+		backCx.strokeRect(rectLW, rectT + tp, rectLW, rectH);
+		backCx.fillRect(rectLW, Math.min(rectT + tp + rectH - boxH, Math.max(rectT + tp, rectT + rectH - boxH - tp)), rectLW, boxH);
+		
+	}
 	requestAnimationFrame(animate);
-
 }
 
 
