@@ -47,7 +47,7 @@ var backCx = backCanv.getContext("2d");
 
 var midCanv = document.getElementById("midCanv");
 midCanv.width = screenW;
-midCanv.height = screenH;
+midCanv.height = screenH + scrollAmt;
 var midCx = midCanv.getContext("2d");
 
 
@@ -95,9 +95,10 @@ function updateClick(event)
 	
 	if(ignoreDef) event.preventDefault();
 	
-	midCx.clearRect(0, 0, midCanv.width, midCanv.height);
+	
 	if(event.touches)
 	{
+		midCx.clearRect(0, 0, midCanv.width, midCanv.height);
 		var tp = (window.pageYOffset || document.documentElement.scrollTop);
 		midCx.fillStyle = 'RGB(200, 100, 100)';
 		midCx.beginPath();
@@ -236,7 +237,7 @@ function animate()
 	
 	if(curH > screenH)
 	{
-		backCx.fillRect(0, tp, 100, 100);
+		backCx.fillRect(1, tp, 100, 100);
 		
 	}
 	else
