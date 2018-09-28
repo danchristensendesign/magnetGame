@@ -111,6 +111,12 @@ function updateClick(e)
 		midCx.beginPath();	
 		midCx.strokeText(e.type, e.touches[0].pageX, 400);
 	}
+	if(e.type === "touchstart")
+	{
+		ignoreDef = (curH > screenH && (e.touches[i].pageY > 100 || e.touches[i].pageX > 100));
+		midCx.beginPath();	
+		midCx.strokeText(ignoreDef, e.touches[0].pageX, 440);
+	}
 	
 	//if(ignoreDef) e.preventDefault();
 	/* if(e.touches)
