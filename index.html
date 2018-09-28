@@ -77,21 +77,26 @@ var ctr = 0;
 function checkScreen()
 {
 
-	screenW = (window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth);
-	screenH = (window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight);
-	forceOut = (screenW > screenH);
-	
-	if(!forceOut)
+	setTimeout(function () 
 	{
-		actH = Math.min(screenH, screenW / screenR);
-		actW = (actH *screenR);
-		backCanv.height = screenH + scrollAmt;
-		midCanv.height = screenH + scrollAmt;
-	}
-	ctr++;
-	midCx.fillStyle = 'RGB(200, 100, 100)';
-	midCx.beginPath();
-	midCx.strokeText(ctr + ', ' + forceOut, 50, (window.pageYOffset || document.documentElement.scrollTop) + 50);
+		screenW = (window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth);
+		screenH = (window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight);
+		forceOut = (screenW > screenH);
+		
+		if(!forceOut)
+		{
+			actH = Math.min(screenH, screenW / screenR);
+			actW = (actH *screenR);
+			backCanv.height = screenH + scrollAmt;
+			midCanv.height = screenH + scrollAmt;
+		}
+		ctr++;
+		midCx.fillStyle = 'RGB(200, 100, 100)';
+		midCx.beginPath();
+		midCx.strokeText(ctr + ', ' + forceOut, 50, (window.pageYOffset || document.documentElement.scrollTop) + 50);
+	}, 300);
+
+	
 	
 	
 }
