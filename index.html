@@ -86,7 +86,7 @@ setTimeout(function () {
 
 var ignoreDef = false;
 
-function updateClick(event)
+function updateClick(e)
 {
 	var curH = (window.innerHeight);// || document.documentElement.clientHeight || document.body.clientHeight);
 	
@@ -95,28 +95,28 @@ function updateClick(event)
 		isTouch = false;
 	}
 	else  */
-	if(event.type === "touchstart")
+	if(e.type === "touchstart")
 	{
-		ignoreDef = (curH > screenH && (event.touches[i].pageY > 100 || event.touches[i].pageX > 100));
+		ignoreDef = (curH > screenH && (e.touches[i].pageY > 100 || e.touches[i].pageX > 100));
 	}
 	
-	if(ignoreDef) event.preventDefault();
+	if(ignoreDef) e.preventDefault();
 	
 	
-/* 	if(event.touches)
+/* 	if(e.touches)
 	{
 		midCx.clearRect(0, 0, midCanv.width, midCanv.height);
 		var tp = (window.pageYOffset || document.documentElement.scrollTop);
 		midCx.fillStyle = 'RGB(200, 100, 100)';
 		midCx.beginPath();
-		midCx.arc(event.touches[0].pageX, event.touches[0].pageY , 9, 0, 2* Math.PI);
+		midCx.arc(e.touches[0].pageX, e.touches[0].pageY , 9, 0, 2* Math.PI);
 		midCx.fill();
 	} */
 		
 	
 
 	
-/* 	if(event.type === "touchend")
+/* 	if(e.type === "touchend")
 	{
 		if(maxFound && curH >= maxH)
 		{
@@ -135,7 +135,7 @@ function updateClick(event)
 	
 	if(isPlaying)
 	{
-		switch(event.type)
+		switch(e.type)
 		{
 			case "touchstart": 
 				animStr = "possible pause";
@@ -167,12 +167,12 @@ function updateClick(event)
 	}
 	else
 	{
-		if(event.touches)
+		if(e.touches)
 		{
-			var delY = event.touches[0].pageY - lastY;
-			lastY = event.touches[0].pageY;
+			var delY = e.touches[0].pageY - lastY;
+			lastY = e.touches[0].pageY;
 		}
-		switch(event.type)
+		switch(e.type)
 		{
 			case "touchstart": 
 				animStr = "possible start";
@@ -260,27 +260,27 @@ function animate()
 }
 
 
-/* function updateClick(event)
+/* function updateClick(e)
 {
-	pos(event);
+	pos(e);
 } */
 
-/* function pos(event)
+/* function pos(e)
 {
 
 		
 
 	{
 
-		if(event.type.substr(0,5) === 'mouse')
+		if(e.type.substr(0,5) === 'mouse')
 		{
-			checkIt([event.clientX - offX, event.clientY - offY]);
+			checkIt([e.clientX - offX, e.clientY - offY]);
 		}
 		else
 		{
-			for (i=0; i < event.touches.length; i++) 
+			for (i=0; i < e.touches.length; i++) 
 			{  
-				if(event.type === "touchend")
+				if(e.type === "touchend")
 				{
 					lastY = null;
 				}
@@ -292,7 +292,7 @@ function animate()
 						var curH = (window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight);
 						var tp = window.pageYOffset || document.documentElement.scrollTop;
 						
-						var delY = event.touches[i].pageY - lastY;
+						var delY = e.touches[i].pageY - lastY;
 						if(delY <= 0)
 						{
 							if(curH > maxH)
@@ -302,7 +302,7 @@ function animate()
 							}
 							else 
 							{
-								//e.preventDefault();
+								//e.preDefault();
 								state = "started";
 							}
 						}
@@ -312,12 +312,12 @@ function animate()
 						}
 						
 					}
-					lastY = event.touches[i].pageY;
+					lastY = e.touches[i].pageY;
 					backCx.clearRect(0,0, backCanv.width, backCanv.height);
 					backCx.font="30px Verdana"
 					backCx.beginPath();
 					backCx.strokeStyle = 'RGB(0,0,0)';
-					backCx.strokeText(event.touches[i].pageY + ', ' + state +  ', ' + curH, 10, 400 + tp);
+					backCx.strokeText(e.touches[i].pageY + ', ' + state +  ', ' + curH, 10, 400 + tp);
 				}
 				
 			}
