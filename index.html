@@ -105,26 +105,17 @@ function updateClick(e)
 	midCx.fillStyle = 'RGB(0, 0, 0)';
 	
 
-	{
 
-		midCx.clearRect(0, 0, midCanv.width, midCanv.height);
-		midCx.beginPath();	
-		midCx.strokeText(e.type, 50, 400);
-	}
 	if(e.type === "touchstart")
 	{
-		//ignoreDef = (curH > screenH && (e.touches[i].pageY > 100 || e.touches[i].pageX > 100));
+		midCx.clearRect(0, 0, midCanv.width, midCanv.height);
+		ignoreDef = (curH > screenH && (e.touches[0].pageY > 100 || e.touches[0].pageX > 100));
 		midCx.beginPath();	
-		//if(ignoreDef) midCx.strokeText("ignore", e.touches[0].pageX, 440);
-		//else 
-			midCx.strokeText("okay", 50, 440);
+		if(ignoreDef) midCx.strokeText("ignore", e.touches[0].pageX, 440);
+		else midCx.strokeText("okay", 50, 440);
 	}
-	else
-	{
-		midCx.beginPath();	
-		midCx.strokeText(e.type, 50, 440);
-	}
-	//if(ignoreDef) e.preventDefault();
+
+	if(ignoreDef) e.preventDefault();
 	/* if(e.touches)
 	{
 		midCx.clearRect(0, 0, midCanv.width, midCanv.height);
