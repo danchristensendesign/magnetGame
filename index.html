@@ -91,9 +91,9 @@ function checkScreen()
 			midCanv.height = screenH + scrollAmt;
 		}
 		ctr++;
-		midCx.fillStyle = 'RGB(200, 100, 100)';
+		/* midCx.fillStyle = 'RGB(200, 100, 100)';
 		midCx.beginPath();
-		midCx.strokeText(ctr + ', ' + forceOut, 50, (window.pageYOffset || document.documentElement.scrollTop) + 50);
+		midCx.strokeText(ctr + ', ' + forceOut, 50, (window.pageYOffset || document.documentElement.scrollTop) + 50); */
 	}, 300);
 
 	
@@ -292,7 +292,7 @@ function animate()
 	
 	if(forceOut)
 	{
-		backCx.strokeText('use portrait mode', 40, 40);
+		backCx.strokeText('use portrait mode', 40 + tp, 40);
 	}
 	else if(isPlaying)
 	{
