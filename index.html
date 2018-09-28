@@ -278,12 +278,10 @@ function animate()
 	if(!toggling)
 	{
 		isPlaying = (curH > screenH);
-	}
-	else
-	{
 		if(isPlaying) window.scrollto(0, scollAmt);
 		else window.scrollto(0, 0);
-	}//isPlaying = (maxFound && curH === maxH);
+	}
+	//isPlaying = (maxFound && curH === maxH);
 		//if(isPlaying) animStr = "playing";
 	var tp = (window.pageYOffset || document.documentElement.scrollTop);
 	backCx.clearRect(0, 0, backCanv.width, backCanv.height);
