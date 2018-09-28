@@ -73,8 +73,10 @@ document.addEventListener("touchmove", updateClick);
 window.addEventListener("orientationchange", checkScreen);
 var animStr = "waiting";
 var forceOut = false;
+var ctr = 0;
 function checkScreen()
 {
+
 	screenW = (window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth);
 	screenH = (window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight);
 	forceOut = (screenW > screenH);
@@ -86,6 +88,12 @@ function checkScreen()
 		backCanv.height = screenH + scrollAmt;
 		midCanv.height = screenH + scrollAmt;
 	}
+	ctr++;
+	midCx.fillStyle = 'RGB(200, 100, 100)';
+	midCx.beginPath();
+	midCx.strokeText(ctr, 50, (window.pageYOffset || document.documentElement.scrollTop) + 50);
+	
+	
 }
 
 setTimeout(function () {
@@ -132,7 +140,7 @@ function updateClick(e)
 		
 		
 	
-	if(e.touches)
+	/* if(e.touches)
 	{
 		var tp = (window.pageYOffset || document.documentElement.scrollTop);
 		midCx.fillStyle = 'RGB(200, 100, 100)';
@@ -141,7 +149,7 @@ function updateClick(e)
 		midCx.fill();
 		midCx.beginPath();	
 		midCx.strokeText(e.touches[0].pageY, e.touches[0].pageX, e.touches[0].pageY + 50);
-	}
+	} */
 		
 	
 
