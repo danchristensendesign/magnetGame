@@ -3,7 +3,7 @@
 
 
 
-<body style="-webkit-overflow-scrolling: auto;">
+<body>
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 
@@ -70,19 +70,27 @@ var inCorner = false;
 document.addEventListener("touchstart", updateClick);
 document.addEventListener("touchend", updateClick);
 document.addEventListener("touchmove", updateClick);
-
+window.addEventListener("orientationchange", checkScreen);
 var animStr = "waiting";
-
-setTimeout(function () {
-	screen.orientation.lock("portrait");
-	window.scrollTo(0, 0);
-	screenH = (window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight);
+var forceOut = false;
+function checkScreen()
+{
 	screenW = (window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth);
 	screenH = (window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight);
-	actH = Math.min(screenH, screenW / screenR);
-	actW = (actH *screenR);
-	backCanv.height = screenH + scrollAmt;
-	midCanv.height = screenH + scrollAmt;
+	forceOut = (screenW > screenH);
+	
+	if(!forceOut)
+	{
+		actH = Math.min(screenH, screenW / screenR);
+		actW = (actH *screenR);
+		backCanv.height = screenH + scrollAmt;
+		midCanv.height = screenH + scrollAmt;
+	}
+}
+
+setTimeout(function () {
+	window.scrollTo(0, 0);
+	checkScreen();
 	animate();
 }, 300);
 
@@ -269,7 +277,11 @@ function animate()
 	//if((off > 100 && inc > 0) || (off < -100 && inc < 0)) inc = -inc;
 	//off += inc;
 	
-	if(isPlaying)
+	if(forceOut)
+	{
+		backCx.strokeText('use portrait mode', 40, 40);
+	}
+	else if(isPlaying)
 	{
 		backCx.fillRect(1, tp, 100, 100);
 		
