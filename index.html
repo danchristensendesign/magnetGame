@@ -74,6 +74,7 @@ document.addEventListener("touchmove", updateClick);
 var animStr = "waiting";
 
 setTimeout(function () {
+	screen.orientation.lock("portrait");
 	window.scrollTo(0, 0);
 	screenH = (window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight);
 	screenW = (window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth);
@@ -103,8 +104,8 @@ function updateClick(e)
 		midCx.beginPath();	
 		midCx.strokeText(ignoreDef, e.touches[0].pageX, 400);
 	} */
-	midCx.clearRect(0, 0, midCanv.width, midCanv.height);
-	midCx.fillStyle = 'RGB(0, 0, 0)';
+	//midCx.clearRect(0, 0, midCanv.width, midCanv.height);
+	//midCx.fillStyle = 'RGB(0, 0, 0)';
 	
 
 
@@ -112,7 +113,7 @@ function updateClick(e)
 	{
 		var tp = (window.pageYOffset || document.documentElement.scrollTop);
 		toggling = !(curH > screenH && (e.touches[0].pageY > 100+ tp || e.touches[0].pageX > 100));
-		midCx.beginPath();	
+		//midCx.beginPath();	
 		/* if(ignoreDef) midCx.strokeText("ignore", e.touches[0].pageX, 440);
 		else midCx.strokeText("okay", 50, 440); */
 	}
@@ -276,7 +277,7 @@ function animate()
 	else
 	{
 		backCx.strokeRect(rectLW, rectT + tp, rectLW, rectH);
-		backCx.strokeText(curH + ', ' + screenH, rectLW, rectT);
+		//backCx.strokeText(curH + ', ' + screenH, rectLW, rectT);
 		backCx.fillRect(rectLW, Math.min(rectT + tp + rectH - boxH, Math.max(rectT + tp, rectT + rectH - boxH - tp)), rectLW, boxH);
 		
 	}
