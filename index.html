@@ -102,7 +102,7 @@ function updateClick(event)
 		var tp = (window.pageYOffset || document.documentElement.scrollTop);
 		midCx.fillStyle = 'RGB(200, 100, 100)';
 		midCx.beginPath();
-		midCx.arc(event.touches[0].pageX, event.touches[0].pageY + tp, 9, 0, Math.PI);
+		midCx.arc(event.touches[0].pageX, event.touches[0].pageY , 9, 0, 2* Math.PI);
 		midCx.fill();
 	}
 		
