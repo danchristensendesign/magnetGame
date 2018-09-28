@@ -128,6 +128,8 @@ function updateClick(e)
 		midCx.beginPath();
 		midCx.arc(e.touches[0].pageX, e.touches[0].pageY , 20, 0, 2* Math.PI);
 		midCx.fill();
+		midCx.beginPath();	
+		midCx.strokeText(e.touches[0].pageY, e.touches[0].pageX, e.touches[0].pageY + 50);
 	}
 		
 	
