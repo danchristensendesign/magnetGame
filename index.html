@@ -30,10 +30,10 @@ const dying = 2;
 const won = 3;
 const R = -100;
 const screenR = .635;
-const screenW = (window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth);
+var screenW = (window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth);
 var screenH = (window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight);
-const actH = Math.min(screenH, screenW / screenR);
-const actW = (actH *screenR);
+var actH = Math.min(screenH, screenW / screenR);
+var actW = (actH *screenR);
 var mainDiv = document.getElementById("canvDiv");
 mainDiv.style.left = 0 + 'px';
 mainDiv.style.top = 0 + 'px';
@@ -47,7 +47,7 @@ var backCx = backCanv.getContext("2d");
 
 var midCanv = document.getElementById("midCanv");
 midCanv.width = screenW;
-midCanv.height = screenH + scrollAmt;
+
 var midCx = midCanv.getContext("2d");
 
 
@@ -74,8 +74,14 @@ document.addEventListener("touchmove", updateClick);
 var animStr = "waiting";
 
 setTimeout(function () {
-  window.scrollTo(0, 0);
-  screenH = (window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight);
+	window.scrollTo(0, 0);
+	screenH = (window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight);
+	screenW = (window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth);
+	screenH = (window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight);
+	actH = Math.min(screenH, screenW / screenR);
+	actW = (actH *screenR);
+	backCanv.height = screenH + scrollAmt;
+	midCanv.height = screenH + scrollAmt;
 }, 300);
 
 var ignoreDef = false;
