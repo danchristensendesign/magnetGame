@@ -55,7 +55,7 @@ var toggling = false;
 function updateClick(e)
 {
 	midCx.clearRect(0,0, midCanv.width, midCanv.height);
-	frontCx.fillStyle = 'RGB(25,124,247)';
+	midCx.fillStyle = 'RGB(25,124,247)';
 	var butInd = null;
 	if(e.touches)
 	{
@@ -67,7 +67,7 @@ function updateClick(e)
 			if(sY >= screenH - butS)
 			{
 				butInd = Math.floor(sX/butS);
-				frontCx.fillRect(screenL + butInd * butS, screenT + screenH - butS, butS, butS);
+				midCx.fillRect(screenL + butInd * butS, screenT + screenH - butS, butS, butS);
 			}
 		
 			else if(sX > startX && sX < screenW - startX && sY > startY && sY < screenH - butS - startY)
