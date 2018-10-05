@@ -74,7 +74,7 @@ function updateClick(e)
 			{
 				var xInd = Math.floor((sX - startX)/boxS);
 				var yInd = Math.floor((sY - startY)/boxS);
-				midCx.fillRect(screenL + startX + xInd * (boxS + inGap), screenT + startY + yInd * boxS + inGap, boxS, boxS);
+				midCx.fillRect(screenL + startX + xInd * (boxS + inGap), screenT + startY + yInd * (boxS + inGap), boxS, boxS);
 			}
 			else
 			{
@@ -93,7 +93,7 @@ function updateClick(e)
 			{
 				var xInd = Math.floor((sY - startY)/boxS);
 				var yInd = Math.floor((sX - startX)/boxS);
-				midCx.fillRect(screenL + startX + yInd * (boxS + inGap), screenT + startY + xInd * boxS + inGap, boxS, boxS);
+				midCx.fillRect(screenL + startX + yInd * (boxS + inGap), screenT + startY + xInd * (boxS + inGap), boxS, boxS);
 			}
 			else
 			{
