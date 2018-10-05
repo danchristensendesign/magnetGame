@@ -34,22 +34,16 @@ mainDiv.style.top = 0 + 'px';
 
 
 var backCanv = document.getElementById("backCanv");
-backCanv.width = screenW + scrollAmt;
-backCanv.height = screenH + scrollAmt;
 var backCx = backCanv.getContext("2d");
 
 var midCanv = document.getElementById("midCanv");
-midCanv.width = screenW + scrollAmt;
-midCanv.height = screenH + scrollAmt;
 var midCx = midCanv.getContext("2d");
 
 
 var frontCanv = document.getElementById("frontCanv");
-frontCanv.width = screenW;
-frontCanv.height = screenH;
 var frontCx = frontCanv.getContext("2d");
 
-midCx.fillStyle = 'RGB(255,100,100)';
+midCx.fillStyle = 'RGB(25,124,247)';
 backCx.fillStyle = 'RGB(0,0,0)';
 document.addEventListener("touchstart", updateClick);
 document.addEventListener("touchend", updateClick);
@@ -182,6 +176,8 @@ function reConfigure()
 	backCanv.height = screenH + scrollAmt;
 	midCanv.width = screenW + scrollAmt;
 	midCanv.height = screenH + scrollAmt;
+	frontCanv.width = screenW + scrollAmt;
+	frontCanv.height = screenH + scrollAmt;
 	
 	if(screenH > screenW)
 	{
@@ -208,17 +204,17 @@ function drawBase()
 {
 	console.log('drawing ' + ++drawn);
 	backCx.clearRect(0, 0, backCanv.width, backCanv.height);
-	
+	frontCx.clearRect(0, 0, backCanv.width, backCanv.height);
 	for(var i = 0; i < butts.length; i += 1)
 	{
 		if(screenH > screenW)
 		{
-			backCx.drawImage(butImg, butts[i].imgInd * butImg.height, 0, butImg.height, butImg.height,
+			frontCx.drawImage(butImg, butts[i].imgInd * butImg.height, 0, butImg.height, butImg.height,
 				screenL + butS * i, screenT + screenH - butS, butS, butS);
 		}
 		else
 		{
-			backCx.drawImage(butImg, butts[i].imgInd * butImg.height, 0, butImg.height, butImg.height,
+			frontCx.drawImage(butImg, butts[i].imgInd * butImg.height, 0, butImg.height, butImg.height,
 						 screenL + screenW - butS, screenT + butS * i, butS, butS);
 		}
 	}
