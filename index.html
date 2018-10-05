@@ -57,11 +57,11 @@ function updateClick(e)
 	midCx.clearRect(0,0, midCanv.width, midCanv.height);
 	midCx.fillStyle = 'RGB(25,124,247)';
 	var butInd = null;
-	if(e.type === "touchend")
+	if(e.type === "touchend" || !(e.touches))
 	{
 		toggling = false;
 	}
-	else if(e.touches)
+	else
 	{
 		var sX = e.touches[0].pageX - screenL;
 		var sY = e.touches[0].pageY - screenT;
@@ -251,7 +251,7 @@ function animate()
 	var curW = (window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth);
 	var curH = (window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight);
 	
-	if((curL !== screenL || curT !== screenT || curW !== screenW || curH !== screenH))
+	if(!toggling && (curL !== screenL || curT !== screenT || curW !== screenW || curH !== screenH))
 	{
 		console.log('change');
 		reConfigure();
