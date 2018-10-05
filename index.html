@@ -57,7 +57,11 @@ function updateClick(e)
 	midCx.clearRect(0,0, midCanv.width, midCanv.height);
 	midCx.fillStyle = 'RGB(25,124,247)';
 	var butInd = null;
-	if(e.touches)
+	if(e.type === "touchend")
+	{
+		toggling = false;
+	}
+	else if(e.touches)
 	{
 		var sX = e.touches[0].pageX - screenL;
 		var sY = e.touches[0].pageY - screenT;
@@ -106,7 +110,7 @@ function updateClick(e)
 			toggling = (butInd !== null && !butts[butInd].prevent);
 		}
 	}
-	else if(e.type === "touchend") toggling = false;
+	
 
 	if(!toggling) e.preventDefault();
 
