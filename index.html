@@ -67,8 +67,7 @@ function updateClick(e)
 			if(sY >= screenH - butS)
 			{
 				butInd = Math.floor(sX/butS);
-				frontCx.fillRect(screenL + butInd * butS, screenT + screenH - butS, butS, butS);
-				//midCx.fillRect(screenL, screenT , butS, butS);
+				midCx.fillRect(screenL + butInd * butS, screenT + screenH - butS, butS, butS);
 			}
 		
 			else if(sX > startX && sX < screenW - startX && sY > startY && sY < screenH - butS - startY)
