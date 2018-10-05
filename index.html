@@ -237,14 +237,14 @@ function drawBase()
 		{
 			if(screenH > screenW)
 			{
-				backCx.fillRect(screenL + startX + i * (boxS + inGap), screenT + startY + j * (boxS + inGap), boxS, boxS);
+				backCx.fillRect(startX + i * (boxS + inGap), startY + j * (boxS + inGap), boxS, boxS);
 			}
 			else
 			{
 				/* backCx.save();
 				backCx.translate(0, screen
 				backCx.rotate(Math.PI/2); */
-				backCx.fillRect(screenL + startX + j * (boxS + inGap), screenT + startY + i * (boxS + inGap), boxS, boxS);
+				backCx.fillRect(startX + j * (boxS + inGap), startY + i * (boxS + inGap), boxS, boxS);
 			}
 		}
 	}
