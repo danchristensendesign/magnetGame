@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html>
+
+
+
+<body>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+<div id="canvDiv" class="unselectable" style="position:absolute;">
+	<canvas id="backCanv" style="position: absolute; left: 0; top: 0; z-index: 0;"></canvas>
+	<canvas id="midCanv" style="position: absolute; left: 0; top: 0; z-index: 1;"></canvas>
+	<canvas id="frontCanv" oncontextmenu="return false;" style="position: absolute; left: 0; top: 0; z-index: 2;"></canvas>	
+</div>
+
+
+
+<script>
+
+const outGap = 7;
+const inGap = 5;
+var numX = 6;
+var numY = 11;
+var screenL;
+var screenT;
+var screenW;
+var screenH;
+const scrollAmt = 150;
+
+
+var mainDiv = document.getElementById("canvDiv");
+mainDiv.style.left = 0 + 'px';
+mainDiv.style.top = 0 + 'px';
+
+
+var backCanv = document.getElementById("backCanv");
+backCanv.width = screenW + scrollAmt;
+backCanv.height = screenH + scrollAmt;
+var backCx = backCanv.getContext("2d");
+
+var midCanv = document.getElementById("midCanv");
+midCanv.width = screenW + scrollAmt;
+midCanv.height = screenH + scrollAmt;
+var midCx = midCanv.getContext("2d");
+
+
+var frontCanv = document.getElementById("frontCanv");
+frontCanv.width = screenW;
+frontCanv.height = screenH;
+var frontCx = frontCanv.getContext("2d");
+
+midCx.fillStyle = 'RGB(255,100,100)';
+backCx.fillStyle = 'RGB(0,0,0)';
+document.addEventListener("touchstart", updateClick);
+document.addEventListener("touchend", updateClick);
+document.addEventListener("touchmove", updateClick);
+
+
+var toggling = false;
+
+function updateClick(e)
+{
+	midCx.clearRect(0,0, midCanv.width, midCanv.height);
+	var butInd = null;
+	if(e.touches)
+	{
+		var sX = e.touches[0].pageX - screenL;
+		var sY = e.touches[0].pageY - screenT;
+		
+		if(screenH > screenW)
+		{
+			if(sY >= screenH - butS)
+			{
+				butInd = Math.floor(sX/butS);
+				midCx.fillRect(butInd * butS, curT + screenH - butS, butS, butS);
+			}
+		
+			else if(sX > startX && sX < screenW - startX && sY > startY && sY < screenH - butS - startY)
+			{
+				var xInd = Math.floor((sX - startX)/boxS);
+				var yInd = Math.floor((sY - startY)/boxS);
+				midCx.fillRect(startX + xInd * (boxS + inGap), startY + yInd * boxS + inGap, boxS, boxS);
+			}
+			else
+			{
+				//do nothing
+			}
+		}
+		else
+		{
+			if(sX >= screenW - butS)
+			{
+				butInd = Math.floor((screenH -sY)/butS);
+				midCx.fillRect(curL + screenW - butS, curT + screenH - butInd * butS, butS, butS);
+			}
+		
+			else if(sX > startX && sX < screenW - butS - startX && sY > startY && sY < screenH - startY)
+			{
+				var xInd = Math.floor((sY - startY)/boxS);
+				var yInd = Math.floor((sX - startX)/boxS);
+				midCx.fillRect(startX + yInd * (boxS + inGap), startY + xInd * boxS + inGap, boxS, boxS);
+			}
+			else
+			{
+				//do nothing
+			}
+		}
+					
+		if(e.type === "touchstart")
+		{
+			toggling = (butInd !== null && !butts[butInd].prevent);
+		}
+	}
+	else if(e.type === "touchend") toggling = false;
+
+	if(!toggling) e.preventDefault();
+
+}
+
+var scrnBut = {
+	prevent: false,
+	imgInd: 0,
+	action: function(){
+		//do nothing
+	}
+};
+
+var menuBut = {
+	prevent: true,
+	imgInd: 1,
+	action: function(){
+		//load menu
+	}
+};
+
+var restartBut = {
+	prevent: true,
+	imgInd: 2,
+	action: function(){
+		loadLevel(false);
+	}
+};
+
+var undoBut = {
+	prevent: true,
+	imgInd: 3,
+	action: function(){
+		//undo
+	}
+};
+
+var hintsBut = {
+	prevent: true,
+	imgInd: 4,
+	action: function(){
+		//toggle hints
+	}
+};
+
+var butts = [scrnBut, menuBut, restartBut, undoBut, hintsBut]; 
+var butImg = document.createElement("img");
+butImg.onload = function() 
+{
+	setTimeout(function () 
+	{
+		backCanv.width = screenW + scrollAmt;
+		backCanv.height = screenH + scrollAmt;
+		animate();
+	}, 300);
+/* 	loaded += 1;
+	if(loaded == 1) startIt(); */
+}
+butImg.src = "buttons.png";
+
+function reConfigure()
+{
+	screenL = (window.pageXOffset || document.documentElement.scrollLeft);
+	screenT = (window.pageYOffset || document.documentElement.scrollTop);
+	screenW = (window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth);
+	screenH = (window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight);
+	backCanv.width = screenW + scrollAmt;
+	backCanv.height = screenH + scrollAmt;
+	midCanv.width = screenW + scrollAmt;
+	midCanv.height = screenH + scrollAmt;
+	
+	if(screenH > screenW)
+	{
+		butS = screenW / butts.length;
+		var boxH = (screenH - butS - 2 * outGap - (numY-1) * inGap)/numY; 
+		var boxW = (screenW - 2 * outGap - (numX-1) * inGap)/numX; 
+		boxS = Math.min(boxH, boxW);
+		startX = (screenW - boxS * numX - (numX - 1) * inGap)/2;
+		startY = (screenH - butS - boxS * numY - (numY -1) * inGap)/2;
+	}
+	else
+	{
+		butS = screenH / butts.length;
+		var boxH = (screenH - 2 * outGap - (numX-1) * inGap)/numX; 
+		var boxW = (screenW - butS - 2 * outGap - (numY-1) * inGap)/numY; 
+		boxS = Math.min(boxH, boxW);
+		startX = (screenW - butS - boxS * numY - (numY - 1) * inGap)/2;
+		startY = (screenH - boxS * numX - (numX -1) * inGap)/2;
+	}
+	drawBase();
+}
+var drawn = 0;	
+function drawBase()
+{
+	console.log('drawing ' + ++drawn);
+	backCx.clearRect(0, 0, backCanv.width, backCanv.height);
+	
+	for(var i = 0; i < butts.length; i += 1)
+	{
+		if(screenH > screenW)
+		{
+			backCx.drawImage(butImg, butts[i].imgInd * butImg.height, 0, butImg.height, butImg.height,
+				screenL + butS * i, screenT + screenH - butS, butS, butS);
+		}
+		else
+		{
+			backCx.drawImage(butImg, butts[i].imgInd * butImg.height, 0, butImg.height, butImg.height,
+						 screenL + screenW - butS, screenT + butS * i, butS, butS);
+		}
+	}
+	for(var i = 0; i < numX; i += 1)
+	{
+		for(var j = 0; j < numY; j += 1)
+		{
+			if(screenH > screenW)
+			{
+				backCx.fillRect(screenL + startX + i * (boxS + inGap), screenT + startY + j * (boxS + inGap), boxS, boxS);
+			}
+			else
+			{
+				backCx.fillRect(screenL + startX + j * (boxS + inGap), screenT + startY + i * (boxS + inGap), boxS, boxS);
+			}
+		}
+	}
+}
+
+function animate()
+{
+
+	var curL = (window.pageXOffset || document.documentElement.scrollLeft);
+	var curT = (window.pageYOffset || document.documentElement.scrollTop);
+	var curW = (window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth);
+	var curH = (window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight);
+	
+	if(curL !== screenL || curT !== screenT || curW !== screenW || curH !== screenH)
+	{
+		console.log('change');
+		reConfigure();
+	}
+		
+	requestAnimationFrame(animate);
+}
+
+
+
+</script>
+
+</body>
+
+</html> 
