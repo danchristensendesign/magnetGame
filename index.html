@@ -55,7 +55,7 @@ var toggling = false;
 function updateClick(e)
 {
 	midCx.clearRect(0,0, midCanv.width, midCanv.height);
-	midCx.fillStyle = 'RGB(25,124,247)';
+	frontCx.fillStyle = 'RGB(25,124,247)';
 	var butInd = null;
 	if(e.touches)
 	{
@@ -160,6 +160,10 @@ butImg.onload = function()
 	{
 		backCanv.width = screenW + scrollAmt;
 		backCanv.height = screenH + scrollAmt;
+		for(var i = 0; i < butts.length; i += 1)
+		{
+			console.log(butts[i].prevent);
+			}
 		animate();
 	}, 300);
 /* 	loaded += 1;
@@ -216,7 +220,7 @@ function drawBase()
 		else
 		{
 			frontCx.drawImage(butImg, butts[i].imgInd * butImg.height, 0, butImg.height, butImg.height,
-						 screenL + screenW - butS, screenT + butS * i, butS, butS);
+						 screenL + screenW - butS, screenT + screenH - butS * (i + 1), butS, butS);
 		}
 	}
 	for(var i = 0; i < numX; i += 1)
