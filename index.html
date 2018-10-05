@@ -162,12 +162,11 @@ butImg.onload = function()
 {
 	setTimeout(function () 
 	{
-		backCanv.width = screenW + scrollAmt;
-		backCanv.height = screenH + scrollAmt;
-		for(var i = 0; i < butts.length; i += 1)
+		backCx.save();
+		/* for(var i = 0; i < butts.length; i += 1)
 		{
 			console.log(butts[i].prevent);
-			}
+		} */
 		animate();
 	}, 300);
 /* 	loaded += 1;
@@ -187,6 +186,8 @@ function reConfigure()
 	midCanv.height = screenH + scrollAmt;
 	frontCanv.width = screenW + scrollAmt;
 	frontCanv.height = screenH + scrollAmt;
+	backCx.restore();
+	backCx.translate(-screenL, -screenT);
 	
 	if(screenH > screenW)
 	{
@@ -214,6 +215,7 @@ function drawBase()
 	console.log('drawing ' + ++drawn);
 	backCx.clearRect(0, 0, backCanv.width, backCanv.height);
 	frontCx.clearRect(0, 0, backCanv.width, backCanv.height);
+	backCx.restore();
 	for(var i = 0; i < butts.length; i += 1)
 	{
 		if(screenH > screenW)
@@ -227,6 +229,8 @@ function drawBase()
 						 screenL + screenW - butS, screenT + screenH - butS * (i + 1), butS, butS);
 		}
 	}
+	
+	
 	for(var i = 0; i < numX; i += 1)
 	{
 		for(var j = 0; j < numY; j += 1)
@@ -237,6 +241,9 @@ function drawBase()
 			}
 			else
 			{
+				/* backCx.save();
+				backCx.translate(0, screen
+				backCx.rotate(Math.PI/2); */
 				backCx.fillRect(screenL + startX + j * (boxS + inGap), screenT + startY + i * (boxS + inGap), boxS, boxS);
 			}
 		}
