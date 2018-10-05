@@ -16,38 +16,31 @@
 
 
 <script>
+
+const outGap = 7;
+const inGap = 5;
+var numX = 6;
+var numY = 11;
+var screenL;
+var screenT;
+var screenW;
+var screenH;
 const scrollAmt = 150;
-const playerCol = 'RGB(230,230,230)';
-const magOffCol = 'RGB(111,183,214)';
-const magOnCol = 'RGB(133,292,93)';
-const magRingCol = 'RGB(100, 170, 200)';//'RGB(251,182,209)';
-const wormCol =  'RGB(30,30,255)';// 'RGB(0,0, 200)';
-const wormRingCol = 'RGB(192,5,248)';
-const AID = 3;
-const playing = 0;
-const winning = 1;
-const dying = 2;
-const won = 3;
-const R = -100;
-const screenR = .635;
-var screenW = (window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth);
-var screenH = (window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight);
-var actH = Math.min(screenH, screenW / screenR);
-var actW = (actH *screenR);
+
+
 var mainDiv = document.getElementById("canvDiv");
 mainDiv.style.left = 0 + 'px';
 mainDiv.style.top = 0 + 'px';
-const offX = (screenW - actW)/2;
-const offY = (screenH - actH)/2;
+
 
 var backCanv = document.getElementById("backCanv");
-backCanv.width = screenW;
+backCanv.width = screenW + scrollAmt;
 backCanv.height = screenH + scrollAmt;
 var backCx = backCanv.getContext("2d");
 
 var midCanv = document.getElementById("midCanv");
-midCanv.width = screenW;
-
+midCanv.width = screenW + scrollAmt;
+midCanv.height = screenH + scrollAmt;
 var midCx = midCanv.getContext("2d");
 
 
@@ -56,358 +49,213 @@ frontCanv.width = screenW;
 frontCanv.height = screenH;
 var frontCx = frontCanv.getContext("2d");
 
-document.addEventListener("mousemove", updateClick);
-document.addEventListener("mousedown", updateClick);
-document.addEventListener("mouseup", updateClick);
-var isPlaying = false;
-var maxFound = false;
-var maxH = screenH;
-var lastY = null;
-var isTouch = false;
-var inCorner = false;
-
-//document.addEventListener("touchmove", touchMove, {passive: false});
+midCx.fillStyle = 'RGB(255,100,100)';
+backCx.fillStyle = 'RGB(0,0,0)';
 document.addEventListener("touchstart", updateClick);
 document.addEventListener("touchend", updateClick);
 document.addEventListener("touchmove", updateClick);
-window.addEventListener("orientationchange", checkScreen);
-var animStr = "waiting";
-var forceOut = false;
-var ctr = 0;
-function checkScreen()
-{
 
-	setTimeout(function () 
-	{
-		screenW = (window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth);
-		screenH = (window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight);
-		forceOut = (screenW > screenH);
-		
-		if(!forceOut)
-		{
-			actH = Math.min(screenH, screenW / screenR);
-			actW = (actH *screenR);
-			backCanv.height = screenH + scrollAmt;
-			midCanv.height = screenH + scrollAmt;
-		}
-		ctr++;
-		/* midCx.fillStyle = 'RGB(200, 100, 100)';
-		midCx.beginPath();
-		midCx.strokeText(ctr + ', ' + forceOut, 50, (window.pageYOffset || document.documentElement.scrollTop) + 50); */
-	}, 300);
-
-	
-	
-	
-}
-
-setTimeout(function () {
-	window.scrollTo(0, 0);
-	checkScreen();
-	animate();
-}, 300);
 
 var toggling = false;
 
 function updateClick(e)
 {
-	var curH = (window.innerHeight);// || document.documentElement.clientHeight || document.body.clientHeight);
-	
-	/* if(event.type === "touchend")
+	midCx.clearRect(0,0, midCanv.width, midCanv.height);
+	var butInd = null;
+	if(e.touches)
 	{
-		isTouch = false;
-	}
-	else  */
-	/* if(e.type === "touchstart")
-	{
-		ignoreDef = (curH > screenH && (e.touches[i].pageY > 100 || e.touches[i].pageX > 100));
-		midCx.clearRect(0, 0, midCanv.width, midCanv.height);
-		midCx.beginPath();	
-		midCx.strokeText(ignoreDef, e.touches[0].pageX, 400);
-	} */
-	//midCx.clearRect(0, 0, midCanv.width, midCanv.height);
-	//midCx.fillStyle = 'RGB(0, 0, 0)';
-	
-
-
-	if(e.type === "touchstart")
-	{
-		var tp = (window.pageYOffset || document.documentElement.scrollTop);
-		toggling = !(curH > screenH && (e.touches[0].pageY > 100+ tp || e.touches[0].pageX > 100));
-		//midCx.beginPath();	
-		/* if(ignoreDef) midCx.strokeText("ignore", e.touches[0].pageX, 440);
-		else midCx.strokeText("okay", 50, 440); */
+		var sX = e.touches[0].pageX - screenL;
+		var sY = e.touches[0].pageY - screenT;
+		
+		if(screenH > screenW)
+		{
+			if(sY >= screenH - butS)
+			{
+				butInd = Math.floor(sX/butS);
+				midCx.fillRect(butInd * butS, curT + screenH - butS, butS, butS);
+			}
+		
+			else if(sX > startX && sX < screenW - startX && sY > startY && sY < screenH - butS - startY)
+			{
+				var xInd = Math.floor((sX - startX)/boxS);
+				var yInd = Math.floor((sY - startY)/boxS);
+				midCx.fillRect(startX + xInd * (boxS + inGap), startY + yInd * boxS + inGap, boxS, boxS);
+			}
+			else
+			{
+				//do nothing
+			}
+		}
+		else
+		{
+			if(sX >= screenW - butS)
+			{
+				butInd = Math.floor((screenH -sY)/butS);
+				midCx.fillRect(curL + screenW - butS, curT + screenH - butInd * butS, butS, butS);
+			}
+		
+			else if(sX > startX && sX < screenW - butS - startX && sY > startY && sY < screenH - startY)
+			{
+				var xInd = Math.floor((sY - startY)/boxS);
+				var yInd = Math.floor((sX - startX)/boxS);
+				midCx.fillRect(startX + yInd * (boxS + inGap), startY + xInd * boxS + inGap, boxS, boxS);
+			}
+			else
+			{
+				//do nothing
+			}
+		}
+					
+		if(e.type === "touchstart")
+		{
+			toggling = (butInd !== null && !butts[butInd].prevent);
+		}
 	}
 	else if(e.type === "touchend") toggling = false;
 
 	if(!toggling) e.preventDefault();
 
-		
-		
-	
-	/* if(e.touches)
-	{
-		var tp = (window.pageYOffset || document.documentElement.scrollTop);
-		midCx.fillStyle = 'RGB(200, 100, 100)';
-		midCx.beginPath();
-		midCx.arc(e.touches[0].pageX, e.touches[0].pageY , 20, 0, 2* Math.PI);
-		midCx.fill();
-		midCx.beginPath();	
-		midCx.strokeText(e.touches[0].pageY, e.touches[0].pageX, e.touches[0].pageY + 50);
-	} */
-		
-	
+}
 
-	
-/* 	if(e.type === "touchend")
+var scrnBut = {
+	prevent: false,
+	imgInd: 0,
+	action: function(){
+		//do nothing
+	}
+};
+
+var menuBut = {
+	prevent: true,
+	imgInd: 1,
+	action: function(){
+		//load menu
+	}
+};
+
+var restartBut = {
+	prevent: true,
+	imgInd: 2,
+	action: function(){
+		loadLevel(false);
+	}
+};
+
+var undoBut = {
+	prevent: true,
+	imgInd: 3,
+	action: function(){
+		//undo
+	}
+};
+
+var hintsBut = {
+	prevent: true,
+	imgInd: 4,
+	action: function(){
+		//toggle hints
+	}
+};
+
+var butts = [scrnBut, menuBut, restartBut, undoBut, hintsBut]; 
+var butImg = document.createElement("img");
+butImg.onload = function() 
+{
+	setTimeout(function () 
 	{
-		if(maxFound && curH >= maxH)
+		backCanv.width = screenW + scrollAmt;
+		backCanv.height = screenH + scrollAmt;
+		animate();
+	}, 300);
+/* 	loaded += 1;
+	if(loaded == 1) startIt(); */
+}
+butImg.src = "buttons.png";
+
+function reConfigure()
+{
+	screenL = (window.pageXOffset || document.documentElement.scrollLeft);
+	screenT = (window.pageYOffset || document.documentElement.scrollTop);
+	screenW = (window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth);
+	screenH = (window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight);
+	backCanv.width = screenW + scrollAmt;
+	backCanv.height = screenH + scrollAmt;
+	midCanv.width = screenW + scrollAmt;
+	midCanv.height = screenH + scrollAmt;
+	
+	if(screenH > screenW)
+	{
+		butS = screenW / butts.length;
+		var boxH = (screenH - butS - 2 * outGap - (numY-1) * inGap)/numY; 
+		var boxW = (screenW - 2 * outGap - (numX-1) * inGap)/numX; 
+		boxS = Math.min(boxH, boxW);
+		startX = (screenW - boxS * numX - (numX - 1) * inGap)/2;
+		startY = (screenH - butS - boxS * numY - (numY -1) * inGap)/2;
+	}
+	else
+	{
+		butS = screenH / butts.length;
+		var boxH = (screenH - 2 * outGap - (numX-1) * inGap)/numX; 
+		var boxW = (screenW - butS - 2 * outGap - (numY-1) * inGap)/numY; 
+		boxS = Math.min(boxH, boxW);
+		startX = (screenW - butS - boxS * numY - (numY - 1) * inGap)/2;
+		startY = (screenH - boxS * numX - (numX -1) * inGap)/2;
+	}
+	drawBase();
+}
+var drawn = 0;	
+function drawBase()
+{
+	console.log('drawing ' + ++drawn);
+	backCx.clearRect(0, 0, backCanv.width, backCanv.height);
+	
+	for(var i = 0; i < butts.length; i += 1)
+	{
+		if(screenH > screenW)
 		{
-			animStr = "playing";
-			isPlaying = true;
+			backCx.drawImage(butImg, butts[i].imgInd * butImg.height, 0, butImg.height, butImg.height,
+				screenL + butS * i, screenT + screenH - butS, butS, butS);
 		}
 		else
 		{
-			var outH =  window.outerHeight;
-			isPlaying = false;
-			animStr = curH + ', ' + maxH + ', ' + outH + " paused, waiting";
-		}
-		return;
-	}
-	
-	
-	if(isPlaying)
-	{
-		switch(e.type)
-		{
-			case "touchstart": 
-				animStr = "possible pause";
-				break;
-				
-			case "touchmove":
-				if(curH < maxH) 
-				{
-					animStr = "leading to pause";
-				}
-				else
-				{
-					animStr = "ready to play";
-				}
-				break;
-				
-			case "touchend":
-				if(curH < maxH)
-				{
-					animStr = "paused";
-					isPlaying = false;
-				}
-				else
-				{
-					animStr = "playing";
-				}
-				break;
+			backCx.drawImage(butImg, butts[i].imgInd * butImg.height, 0, butImg.height, butImg.height,
+						 screenL + screenW - butS, screenT + butS * i, butS, butS);
 		}
 	}
-	else
+	for(var i = 0; i < numX; i += 1)
 	{
-		if(e.touches)
+		for(var j = 0; j < numY; j += 1)
 		{
-			var delY = e.touches[0].pageY - lastY;
-			lastY = e.touches[0].pageY;
+			if(screenH > screenW)
+			{
+				backCx.fillRect(screenL + startX + i * (boxS + inGap), screenT + startY + j * (boxS + inGap), boxS, boxS);
+			}
+			else
+			{
+				backCx.fillRect(screenL + startX + j * (boxS + inGap), screenT + startY + i * (boxS + inGap), boxS, boxS);
+			}
 		}
-		switch(e.type)
-		{
-			case "touchstart": 
-				animStr = "possible start";
-				
-				break;
-				
-			case "touchmove":
-				if(!maxFound)
-				{
-					if(delY < 0)
-					{
-						if(curH > maxH)
-						{
-							maxH = curH;
-							animStr = "growing";
-						}
-						else if(curH === maxH && curH > screenH) 
-						{
-							maxFound = true;
-							animStr = "max found";
-						}
-						else
-						{
-							animStr = "maybe growing";
-						}
-					}
-					else
-					{
-						animStr = "maybe growing maybe not";
-					}
-				}
-				else if(curH === maxH)
-				{
-					animStr = "ready to play";
-				}
-				else
-				{
-					animStr = "leading to pause";
-				}
-				
-				break;
-				
-			
-		
-		}
-	} */
+	}
 }
-var off = 0;
-var inc = 1;
-var rectLW = screenW/3;
-var rectH = screenH* .6;
-var rectT = screenH* .2;
-var boxH = rectH - scrollAmt;
-
 
 function animate()
 {
+
+	var curL = (window.pageXOffset || document.documentElement.scrollLeft);
+	var curT = (window.pageYOffset || document.documentElement.scrollTop);
+	var curW = (window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth);
 	var curH = (window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight);
 	
-	if(!toggling)
+	if(curL !== screenL || curT !== screenT || curW !== screenW || curH !== screenH)
 	{
-		isPlaying = (curH > screenH);
-		/* if(isPlaying) window.scrollTo(0, scollAmt);
-		else window.scrollTo(0, 0); */
+		console.log('change');
+		reConfigure();
 	}
-	//isPlaying = (maxFound && curH === maxH);
-		//if(isPlaying) animStr = "playing";
-	var tp = (window.pageYOffset || document.documentElement.scrollTop);
-	backCx.clearRect(0, 0, backCanv.width, backCanv.height);
-	backCx.font="30px Verdana"
-	backCx.beginPath();
-	backCx.strokeStyle = 'RGB(0,0,0)';
-	//backCx.strokeText(animStr, 10, 400 + tp + off);
-	//if((off > 100 && inc > 0) || (off < -100 && inc < 0)) inc = -inc;
-	//off += inc;
-	
-	if(forceOut)
-	{
-		backCx.strokeText('use portrait mode', 40 , 40+ tp);
-	}
-	else if(isPlaying)
-	{
-		backCx.fillRect(1, tp, 100, 100);
 		
-	}
-	else
-	{
-		backCx.strokeRect(rectLW, rectT + tp, rectLW, rectH);
-		//backCx.strokeText(curH + ', ' + screenH, rectLW, rectT);
-		backCx.fillRect(rectLW, Math.min(rectT + tp + rectH - boxH, Math.max(rectT + tp, rectT + rectH - boxH - tp)), rectLW, boxH);
-		
-	}
-	
-	
-	/* if(curH > screenH)
-	{
-		backCx.fillRect(1, tp, 100, 100);
-		
-	}
-	else
-	{
-		backCx.strokeRect(rectLW, rectT + tp, rectLW, rectH);
-		backCx.strokeText(curH + ', ' + screenH, rectLW, rectT);
-		backCx.fillRect(rectLW, Math.min(rectT + tp + rectH - boxH, Math.max(rectT + tp, rectT + rectH - boxH - tp)), rectLW, boxH);
-		
-	} */
-	
 	requestAnimationFrame(animate);
 }
 
 
-/* function updateClick(e)
-{
-	pos(e);
-} */
-
-/* function pos(e)
-{
-
-		
-
-	{
-
-		if(e.type.substr(0,5) === 'mouse')
-		{
-			checkIt([e.clientX - offX, e.clientY - offY]);
-		}
-		else
-		{
-			for (i=0; i < e.touches.length; i++) 
-			{  
-				if(e.type === "touchend")
-				{
-					lastY = null;
-				}
-				else
-				{
-					var state = "";
-					if(lastY !== null)
-					{
-						var curH = (window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight);
-						var tp = window.pageYOffset || document.documentElement.scrollTop;
-						
-						var delY = e.touches[i].pageY - lastY;
-						if(delY <= 0)
-						{
-							if(curH > maxH)
-							{
-								maxH = curH;
-								state = "growing";
-							}
-							else 
-							{
-								//e.preDefault();
-								state = "started";
-							}
-						}
-						else
-						{
-							state = "shrinking";
-						}
-						
-					}
-					lastY = e.touches[i].pageY;
-					backCx.clearRect(0,0, backCanv.width, backCanv.height);
-					backCx.font="30px Verdana"
-					backCx.beginPath();
-					backCx.strokeStyle = 'RGB(0,0,0)';
-					backCx.strokeText(e.touches[i].pageY + ', ' + state +  ', ' + curH, 10, 400 + tp);
-				}
-				
-			}
-		}	
-	}
-}
-
-function checkIt(arr)
-{
-	var curH = (window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight);
-	var tp = window.pageYOffset || document.documentElement.scrollTop;
-	backCx.clearRect(0,0, backCanv.width, backCanv.height);
-	backCx.font="30px Verdana"
-	backCx.beginPath();
-	backCx.strokeStyle = 'RGB(0,0,0)';
-	backCx.strokeText(curH + ', ' + tp, 10, 400);
-		/* else
-		{
-			mag.isOn = false;
-			console.log('off');
-		} 
-	
-} */
 
 </script>
 
