@@ -219,10 +219,10 @@ function reConfigure()
 	}
 	drawBase();
 }
-var drawn = 0;	
+	
 function drawBase()
 {
-	console.log('drawing ' + ++drawn);
+
 	backCx.clearRect(0, 0, backCanv.width, backCanv.height);
 	frontCx.clearRect(0, 0, backCanv.width, backCanv.height);
 	backCx.restore();
@@ -240,12 +240,19 @@ function drawBase()
 		}
 	}
 	
-	
+	if(screenW > screenH)
+	{
+		backCx.save();
+		backCx.translate(0, screenH);
+		backCx.rotate(Math.PI/2);
+	}
+		
 	for(var i = 0; i < numX; i += 1)
 	{
 		for(var j = 0; j < numY; j += 1)
 		{
-			if(screenH > screenW)
+			backCx.fillRect(startX + i * (boxS + inGap), startY + j * (boxS + inGap), boxS, boxS);
+			/* if(screenH > screenW)
 			{
 				backCx.fillRect(startX + i * (boxS + inGap), startY + j * (boxS + inGap), boxS, boxS);
 			}
@@ -253,9 +260,9 @@ function drawBase()
 			{
 				/* backCx.save();
 				backCx.translate(0, screen
-				backCx.rotate(Math.PI/2); */
+				backCx.rotate(Math.PI/2); 
 				backCx.fillRect(startX + j * (boxS + inGap), startY + i * (boxS + inGap), boxS, boxS);
-			}
+			} */
 		}
 	}
 }
