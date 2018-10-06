@@ -30,15 +30,16 @@ const dying = 2;
 const won = 3;
 const R = -100;
 const screenR = .635;
-const screenW = (window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth);
-const screenH = (window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight);
-const actH = Math.min(screenH, screenW / screenR);
-const actW = (actH *screenR);
+var screenW = (window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth);
+var screenH = (window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight);
+var actH = Math.min(screenH, screenW / screenR);
+var actW = (actH *screenR);
+
 var mainDiv = document.getElementById("canvDiv");
 mainDiv.style.left = 0 + 'px';
 mainDiv.style.top = 0 + 'px';
-const offX = (screenW - actW)/2;
-const offY = (screenH - actH)/2;
+var offX = (screenW - actW)/2;
+var offY = (screenH - actH)/2;
 
 var backCanv = document.getElementById("backCanv");
 backCanv.width = screenW;
@@ -245,7 +246,6 @@ var levels = [
 var lastTime;
 var levelInd = 0;
 startGame();
-var scrolled = 0;
 function startGame()
 {
 	
@@ -253,9 +253,24 @@ function startGame()
 	{
 		setTimeout(function () 
 		{
+			screenW = (window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth);
+			screenH = (window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight);
+			actH = Math.min(screenH, screenW / screenR);
+			actW = (actH *screenR);
+			offX = (screenW - actW)/2;
+			offY = (screenH - actH)/2;
+			backCanv.width = screenW;
+			backCanv.height = screenH + 300;
+			midCanv.width = screenW;
+			midCanv.height = screenH;
+			frontCanv.width = screenW;
+			frontCanv.height = screenH;
+			
+			backCx.fillStyle = 'RGB(0,0,0)';
+			backCx.fillRect(0,0,screenW, screenH);
 			//backCanv.height += 60;
 			//window.scrollTo(0, 50);
-			scrolled = 1;
+			//scrolled = 1;
 			loadLevel();
 			
 		}, 1000);
@@ -463,9 +478,7 @@ function checkIt(arr)
 	console.log("d");
 } */
 
-backCx.fillStyle = 'RGB(0,0,0)';
-//backCx.fillRect(offX,offY,actW, actH);
-backCx.fillRect(0,0,screenW, screenH);
+
 requestAnimationFrame(updateFrame);
 
 
