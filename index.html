@@ -60,6 +60,7 @@ function updateClick(e)
 	if(e.type === "touchend" || !(e.touches))
 	{
 		toggling = false;
+		//do action if applicable
 	}
 	else
 	{
@@ -71,6 +72,12 @@ function updateClick(e)
 			if(sY >= screenH - butS)
 			{
 				butInd = Math.floor(sX/butS);
+				if(e.type === "touchstart" && butInd !== null && !butts[butInd].prevent)
+				{
+					toggling = true;
+					window.scrollTo(0, 0);
+					reConfigure();
+				}
 				midCx.fillRect(screenL + butInd * butS, screenT + screenH - butS, butS, butS);
 			}
 		
@@ -90,6 +97,12 @@ function updateClick(e)
 			if(sX >= screenW - butS)
 			{
 				butInd = Math.floor((screenH -sY)/butS);
+				if(e.type === "touchstart" && butInd !== null && !butts[butInd].prevent)
+				{
+					toggling = true;
+					window.scrollTo(0, 0);
+					reConfigure();
+				}
 				midCx.fillRect(screenL + screenW - butS, screenT + screenH - (butInd + 1) * butS, butS, butS);
 			}
 		
@@ -105,15 +118,7 @@ function updateClick(e)
 			}
 		}
 					
-		if(e.type === "touchstart")
-		{
-			if(butInd !== null && !butts[butInd].prevent)
-			{
-				toggling = true;
-				window.scrollTo(0, 0);
-				reConfigure();
-			}
-		}
+		
 	}
 	
 
