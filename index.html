@@ -243,8 +243,9 @@ function drawBase()
 	if(screenW > screenH)
 	{
 		backCx.save();
-		backCx.translate(0, screenH);
 		backCx.rotate(Math.PI/2);
+		backCx.translate(0, screenH);
+		
 	}
 		
 	for(var i = 0; i < numX; i += 1)
@@ -275,7 +276,7 @@ function animate()
 	var curW = (window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth);
 	var curH = (window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight);
 	
-	if(!toggling && (curL !== screenL || curT !== screenT || curW !== screenW || curH !== screenH))
+	if(!touchlist.length && (curL !== screenL || curT !== screenT || curW !== screenW || curH !== screenH))
 	{
 		console.log('change');
 		reConfigure();
