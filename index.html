@@ -107,7 +107,11 @@ function updateClick(e)
 					
 		if(e.type === "touchstart")
 		{
-			toggling = (butInd !== null && !butts[butInd].prevent);
+			if(butInd !== null && !butts[butInd].prevent)
+			{
+				toggling = true;
+				window.scrollTo(0, 0);
+			}
 		}
 	}
 	
