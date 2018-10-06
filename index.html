@@ -221,6 +221,22 @@ var levels = [
 	],
 	
 	[
+		[[90,20,10],
+		[20,15, 15]],
+		
+		[10,70,6],
+		[50,85,3]
+	],
+	
+	[
+		[[100,60,10],
+		[50,50,30]],
+		
+		[90,70,6],
+		[50,80,3]
+	],
+	
+	[
 		[[60,20, 10],
 		[40, 40, 10],
 		[60,60, 10],
@@ -259,6 +275,8 @@ function startGame()
 			actW = (actH *screenR);
 			offX = (screenW - actW)/2;
 			offY = (screenH - actH)/2;
+			mainDiv.style.left = 0 + 'px';
+			mainDiv.style.top = 0 + 'px';
 			backCanv.width = screenW;
 			backCanv.height = screenH + 300;
 			midCanv.width = screenW;
@@ -501,7 +519,7 @@ function updateFrame()
 			var dy = player.spos.y - worm.sy;
 			//var fMag = -2000;
 			var d = Math.pow(Math.pow(dx, 2) + Math.pow(dy, 2), 1/2);
-			var fMag = R * Math.pow(1, 2) * Math.pow(d, 1.4);
+			var fMag = .1* R * Math.pow(1, 2) * Math.pow(d, 1.4);
 			var theta = Math.atan2(dy, dx);
 			fx += Math.cos(theta) * fMag;
 			fy += Math.sin(theta) * fMag;
@@ -546,7 +564,7 @@ function checkStatus()
 	var wormR = distance(player.spos.x, player.spos.y, worm.sx, worm.sy);
 	
 	//check for fully entered worm
-	if(player.state === winning && wormR < 5)
+	if(player.state === winning && wormR <  player.sr)
 	{
 		player.state = won;
 		if(++levelInd < levels.length) loadLevel();
