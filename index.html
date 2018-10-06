@@ -190,12 +190,12 @@ function reConfigure()
 	screenT = (window.pageYOffset || document.documentElement.scrollTop);
 	screenW = (window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth);
 	screenH = (window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight);
-	backCanv.width = screenW + scrollAmt;
-	backCanv.height = screenH + scrollAmt;
-	midCanv.width = screenW + scrollAmt;
-	midCanv.height = screenH + scrollAmt;
-	frontCanv.width = screenW + scrollAmt;
-	frontCanv.height = screenH + scrollAmt;
+	backCanv.width = screenW + screenL + scrollAmt;
+	backCanv.height = screenH + screenT + scrollAmt;
+	midCanv.width = screenW + screenL + scrollAmt;
+	midCanv.height = screenH + screenT + scrollAmt;
+	frontCanv.width = screenW + screenL + scrollAmt;
+	frontCanv.height = screenH + screenT + scrollAmt;
 	backCx.restore();
 	backCx.translate(screenL, screenT);
 	
